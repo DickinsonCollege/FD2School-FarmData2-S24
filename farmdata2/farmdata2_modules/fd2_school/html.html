@@ -35,6 +35,22 @@
     <hr> 
     <h2>Harvest Report Form</h2>
     <form>
+        <label for="crop">Crop:</label>
+        <select id="crop" name="crop">
+            <option value="broccoli">Broccoli</option>
+            <option value="kale" selected>Kale</option>
+            <option value="peas">Peas</option>
+        </select><br><br>
+        <label for="field">Area:</label>
+        <select id="field" name="field">
+            <option value="all" selected>All</option>
+            <option value="chuau-1">Chuau-1</option>
+            <option value="sq7">SQ7</option>
+        </select><br><br>
+        <label for="startDate">Start Date:</label>
+        <input type="date" id="startDate" name="startDate" min="2014-01-01" max="2022-01-01" value="2020-05-05"><br><br>
+        <label for="endDate">End Date:</label>
+        <input type="date" id="endDate" name="endDate" min="2020-05-05" max="2022-01-01" value="2020-05-15"><br><br>
         <label for="title">Title:</label><br>
         <input type="text" id="title" name="title"><br><br>
         <input type="submit" value="Generate Report">
@@ -43,5 +59,4 @@
     <h2>Actual Report</h2>
 </body>
 </html>
-
 
