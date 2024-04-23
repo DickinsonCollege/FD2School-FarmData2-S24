@@ -39,7 +39,7 @@ describe("Check Tray Seeding Section", () => {
 
     cy.get('[data-cy="num-seed-input"] input').should('be.enabled').and('have.value', '');
 
-    // 
+    // Verify that there is a dropdown for Area and check its contents 
 
     cy.get('[data-cy=tray-area-selection]').should('exist');
 
