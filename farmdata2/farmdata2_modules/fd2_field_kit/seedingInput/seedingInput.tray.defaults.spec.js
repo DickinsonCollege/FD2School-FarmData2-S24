@@ -41,11 +41,16 @@ describe("Check Tray Seeding Section", () => {
 
     // 
 
-    cy.get('your_dropdown_selector').should('exist');
+    cy.get('[data-cy=tray-area-selection]').should('exist');
 
-    cy.get('your_dropdown_selector').should('contain', '');
+    cy.get('[data-cy=tray-area-selection]').should('contain','CHUAU');
 
-    cy.get('your_dropdown_selector').should('contain', '');
+    cy.get('[data-cy=tray-area-selection]').should('contain','GHANA');
+
+    cy.get('[data-cy=tray-area-selection]').should('contain','ORION');
+
+    cy.get('[data-cy=tray-area-selection]').should('contain','SEEDING BENCH');
+
 
   });
 
