@@ -21,8 +21,9 @@ describe('Test the sub-tabs of the FieldKit tab', () => {
     })
 
     // Spencer
-    it('', () => {
-        
+    it('Test that the order of the tabs is: Info, Seeding Input', () => {
+        cy.get('.tabs--secondary').children().eq(0).contains('Info')
+        cy.get('.tabs--secondary').children().eq(1).contains('Seeding Input')
     })
 
     // Maximo
