@@ -26,7 +26,7 @@ describe('Test the sub-tabs of the FieldKit tab', () => {
     })
 
     // Maximo
-    it('', () => {
-        
+    it('Check that there are only 2 sub-tabs', () => {
+        cy.get(".tabs--secondary").children().should('have.length', 2)
     })
 })
