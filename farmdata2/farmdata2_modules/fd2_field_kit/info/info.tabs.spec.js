@@ -16,8 +16,9 @@ describe('Test the sub-tabs of the FieldKit tab', () => {
     })
 
     // Gabe
-    it('', () => {
-        
+    it('Test Info and Seeding Input sub-tabs', () => {
+        cy.get('.tabs--secondary').contains('Info').should('exist')
+        cy.get('.tabs--secondary').contains('Seeding Input').should('exist')
     })
 
     // Spencer
