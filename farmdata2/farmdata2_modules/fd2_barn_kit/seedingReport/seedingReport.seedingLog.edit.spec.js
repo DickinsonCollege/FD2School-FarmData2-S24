@@ -10,9 +10,7 @@ describe("Testing cancel and submit button for table element in seeding report",
     it("Make an edit, submit, and check that database was changed", () => { 
         cy.get('[data-cy=r0-edit-button]').click({force: true})
         cy.get('[data-cy=td-r0c13]').type('edit:)')
-        //can't click save button for some reason
         cy.get('[data-cy=r0-save-button]').click({force: true})
-        //still considering how to check values, because confusion in the issue wording
         cy.get('[data-cy=start-date-select]').type('2020-05-05')
         cy.get('[data-cy=end-date-select]').type('2020-05-05')
         cy.get('[data-cy=generate-rpt-btn]').click()
@@ -22,7 +20,6 @@ describe("Testing cancel and submit button for table element in seeding report",
         cy.get('[data-cy=r0-edit-button]').click({force: true})
         cy.get('[data-cy=td-r0c13]').type('rar muahaha')
         cy.get('[data-cy=r0-cancel-button]').click({force: true})
-        //still considering how to check values, because confusion in the issue wording
         cy.get('[data-cy=start-date-select]').type('2020-05-05')
         cy.get('[data-cy=end-date-select]').type('2020-05-05')
         cy.get('[data-cy=generate-rpt-btn]').click()
@@ -32,7 +29,6 @@ describe("Testing cancel and submit button for table element in seeding report",
         cy.get('[data-cy=r0-edit-button]').click({force: true})
         cy.get('[data-cy=td-r0c13]').type('{selectall}{del}')
         cy.get('[data-cy=r0-save-button]').click({force: true})
-        //still considering how to check values, because confusion in the issue wording
         cy.get('[data-cy=start-date-select]').type('2020-05-05')
         cy.get('[data-cy=end-date-select]').type('2020-05-05')
         cy.get('[data-cy=generate-rpt-btn]').click()
