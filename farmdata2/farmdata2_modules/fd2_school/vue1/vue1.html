@@ -1,73 +1,34 @@
+
 <!DOCTYPE html>
-<html lang="en">
-    <div id="app" v-cloak>
-        <input type="text" v-model="reportTitleInput">
-        <h1>{{ reportTitle }}</h1>
-      </div>
-      
-      <script>
-        var app = new Vue({
-          el: '#app',
-          data: {
-            reportTitle: 'My Sample Harvest Report', 
-            reportTitleInput: 'My Sample Harvest Report' 
-          },
-          watch: {
-            reportTitleInput: function(newValue) {
-              this.reportTitle = newValue;
-            }
-          }
-        });
-      </script>
-      
-      
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Harvest Report</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif; 
-        }
-        h1 {
-            font-style: italic; 
-            text-align: center; 
-        }
-        hr {
-            margin-top: 30px; 
-            margin-bottom: 30px; 
-        }
-        ul {
-            list-style-type: none;
-            padding-left: 0;
-        }
-        li::before {
-            content: "\2022"; 
-            font-weight: bold;
-            display: inline-block;
-            width: 1em;
-            margin-left: -1em;
-        }
-        table {
-            border: 1px solid black;
-            border-collapse: collapse;
-            width: 100%;
-        }
-        th, td {
-            border: 1px solid black;
-            padding: 8px;
-            text-align: left;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vue1 Harvest Report</title>
+  <style>
+    [v-cloak] {
+      display: none;
+    }
+  </style>
 </head>
 <body>
-    <h1>Harvest Report</h1>
-    <em>mockup</em> 
-    <hr> 
-    <h2>Harvest Report Form</h2>
+ 
+  <div id="app" v-cloak>
+    <input type="date" v-model="reportStartDate">
+    <input type="date" v-model="reportEndDate">
+    <select v-model="selectedCrop">
+      <option value="broccoli">Broccoli</option>
+      <option value="kale">Kale</option>
+      <option value="peas">Peas</option>
+    </select>
+
+    <h3>Report Start Date: {{ reportStartDate }}</h3>
+    <h3>Report End Date: {{ reportEndDate }}</h3>
+    <h3>Selected Crop: {{ selectedCrop }}</h3>
+  </div>
+
+  
+  <h2>Harvest Report Form</h2>
+  <form>
     <form>
         <label for="crop">Crop:</label>
         <select id="crop" name="crop">
@@ -89,9 +50,12 @@
         <input type="text" id="title" name="title"><br><br>
         <input type="submit" value="Generate Report">
     </form>
-    <hr> 
-    <h2>Actual Report</h2>
-    <table>
+  </form>
+
+  
+  <hr>
+  <h2>Actual Report</h2>
+  <table>
         <tr>
             <th>Date</th>
             <th>Field</th>
@@ -120,8 +84,19 @@
             <td>30</td>
             <td>Michael Johnson</td>
         </tr>
-    </table>
+
+  </table>
+
+  <script src="https://unpkg.com/vue@2"></script>
+  <script>
+    var app = new Vue({
+      el: '#app',
+      data: {
+        reportStartDate: '', 
+        reportEndDate: '', 
+        selectedCrop: '' 
+      }
+    });
+  </script>
 </body>
 </html>
-
-
