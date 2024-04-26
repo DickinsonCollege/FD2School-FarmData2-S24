@@ -1,5 +1,5 @@
-
 <!DOCTYPE html>
+<html>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -24,6 +24,10 @@
     <h3>Report Start Date: {{ reportStartDate }}</h3>
     <h3>Report End Date: {{ reportEndDate }}</h3>
     <h3>Selected Crop: {{ selectedCrop }}</h3>
+    
+    <label for="title">Title:</label>
+    <input type="text" id="title" name="title" v-model="reportTitle"><br><br>
+    <h1>{{ reportTitle !== '' ? reportTitle : 'Mock Harvest Report' }}</h1>
   </div>
 
   
@@ -94,7 +98,8 @@
       data: {
         reportStartDate: '', 
         reportEndDate: '', 
-        selectedCrop: '' 
+        selectedCrop: '',
+        reportTitle: '' 
       }
     });
   </script>
