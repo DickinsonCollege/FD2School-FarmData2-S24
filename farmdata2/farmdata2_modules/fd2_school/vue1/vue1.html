@@ -37,20 +37,20 @@
   <form>
     <form>
         <label for="crop">Crop:</label>
-        <select id="crop" name="crop">
+        <select id="crop" name="crop" v-model="selectedCrop">
           <option v-for="crop in crops" :value="crop">{{ crop }}</option>
         </select><br><br>
         <label for="field">Area:</label>
         <!-- Dropdown for the list of areas -->
-        <select id="field" name="field">
+        <select id="field" name="field" v-model="selectedArea">
           <option v-for="area in areas" :value="area">{{ area }}</option>
         </select><br><br>
         <label for="startDate">Start Date:</label>
-        <input type="date" id="startDate" name="startDate" min="2014-01-01" max="2022-01-01" value="2020-05-05"><br><br>
+        <input type="date" id="startDate" name="startDate" v-model="reportStartDate" min="2014-01-01" max="2022-01-01" value="2020-05-05"><br><br>
         <label for="endDate">End Date:</label>
-        <input type="date" id="endDate" name="endDate" min="2020-05-05" max="2022-01-01" value="2020-05-15"><br><br>
+        <input type="date" id="endDate" name="endDate" v-model="reportEndDate" min="2020-05-05" max="2022-01-01" value="2020-05-15"><br><br>
         <label for="title">Title:</label><br>
-        <input type="text" id="title" name="title"><br><br>
+        <input type="text" id="title" name="title" v-model="reportTitle"><br><br>
         <input type="submit" value="Generate Report">
       </form>
   </form>
@@ -66,28 +66,13 @@
             <th>Quantity (lbs)</th>
             <th>Worker</th>
         </tr>
-        <tr>
-            <td>2020-05-01</td>
-            <td>Chuau-1</td>
-            <td>Kale</td>
-            <td>50</td>
-            <td>John Doe</td>
+        <tr v-for="log in harvestLogs">
+            <td>{{ log.date }}</td>
+            <td>{{ log.area }}</td>
+            <td>{{ log.crop }}</td>
+            <td>{{ log.quantity }}</td>
+            <td>{{ log.worker }}</td>
         </tr>
-        <tr>
-            <td>2020-05-05</td>
-            <td>SQ7</td>
-            <td>Broccoli</td>
-            <td>40</td>
-            <td>Jane Smith</td>
-        </tr>
-        <tr>
-            <td>2020-05-10</td>
-            <td>Chuau-1</td>
-            <td>Peas</td>
-            <td>30</td>
-            <td>Michael Johnson</td>
-        </tr>
-
   </table>
 
   <script src="https://unpkg.com/vue@2"></script>
@@ -98,7 +83,15 @@
         reportStartDate: '', 
         reportEndDate: '', 
         selectedCrop: '',
-        reportTitle: '' 
+        selectedArea: '',
+        reportTitle: '',
+        crops: ["Broccoli", "Kale", "Peas"], 
+        areas: ["Chuau-1", "SQ7"], 
+        harvestLogs: [ 
+          { date: "2020-05-01", area: "Chuau-1", crop: "Kale", quantity: 50, worker: "John Doe" },
+          { date: "2020-05-05", area: "SQ7", crop: "Broccoli", quantity: 40, worker: "Jane Smith" },
+          { date: "2020-05-10", area: "Chuau-1", crop: "Peas", quantity: 30, worker: "Michael Johnson" }
+        ]
       }
     });
   </script>
