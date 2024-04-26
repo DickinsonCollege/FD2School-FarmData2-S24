@@ -16,14 +16,16 @@
     <input type="date" v-model="reportStartDate">
     <input type="date" v-model="reportEndDate">
     <select v-model="selectedCrop">
-      <option value="broccoli">Broccoli</option>
-      <option value="kale">Kale</option>
-      <option value="peas">Peas</option>
+      <option v-for="crop in crops" :value="crop">{{ crop }}</option>
+    </select>
+    <select v-model="selectedArea">
+      <option v-for="area in areas" :value="area">{{ area }}</option>
     </select>
 
     <h3>Report Start Date: {{ reportStartDate }}</h3>
     <h3>Report End Date: {{ reportEndDate }}</h3>
     <h3>Selected Crop: {{ selectedCrop }}</h3>
+    <h3>Selected Area: {{ selectedArea }}</h3>
     
     <label for="title">Title:</label>
     <input type="text" id="title" name="title" v-model="reportTitle"><br><br>
@@ -36,15 +38,12 @@
     <form>
         <label for="crop">Crop:</label>
         <select id="crop" name="crop">
-            <option value="broccoli">Broccoli</option>
-            <option value="kale" selected>Kale</option>
-            <option value="peas">Peas</option>
+          <option v-for="crop in crops" :value="crop">{{ crop }}</option>
         </select><br><br>
         <label for="field">Area:</label>
+        <!-- Dropdown for the list of areas -->
         <select id="field" name="field">
-            <option value="all" selected>All</option>
-            <option value="chuau-1">Chuau-1</option>
-            <option value="sq7">SQ7</option>
+          <option v-for="area in areas" :value="area">{{ area }}</option>
         </select><br><br>
         <label for="startDate">Start Date:</label>
         <input type="date" id="startDate" name="startDate" min="2014-01-01" max="2022-01-01" value="2020-05-05"><br><br>
@@ -53,7 +52,7 @@
         <label for="title">Title:</label><br>
         <input type="text" id="title" name="title"><br><br>
         <input type="submit" value="Generate Report">
-    </form>
+      </form>
   </form>
 
   
@@ -105,3 +104,9 @@
   </script>
 </body>
 </html>
+
+
+
+
+
+
