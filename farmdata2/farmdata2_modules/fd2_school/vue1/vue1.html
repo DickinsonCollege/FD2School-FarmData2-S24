@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Harvest Report</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif; 
+        }
+        h1 {
+            font-style: italic; 
+            text-align: center; 
+        }
+        hr {
+            margin-top: 30px; 
+            margin-bottom: 30px; 
+        }
+        ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        li::before {
+            content: "\2022"; 
+            font-weight: bold;
+            display: inline-block;
+            width: 1em;
+            margin-left: -1em;
+        }
+        table {
+            border: 1px solid black;
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Harvest Report</h1>
+    <em>mockup</em> 
+    <hr> 
+    <h2>Harvest Report Form</h2>
+    <form>
+        <label for="crop">Crop:</label>
+        <select id="crop" name="crop">
+            <option value="broccoli">Broccoli</option>
+            <option value="kale" selected>Kale</option>
+            <option value="peas">Peas</option>
+        </select><br><br>
+        <label for="field">Area:</label>
+        <select id="field" name="field">
+            <option value="all" selected>All</option>
+            <option value="chuau-1">Chuau-1</option>
+            <option value="sq7">SQ7</option>
+        </select><br><br>
+        <label for="startDate">Start Date:</label>
+        <input type="date" id="startDate" name="startDate" min="2014-01-01" max="2022-01-01" value="2020-05-05"><br><br>
+        <label for="endDate">End Date:</label>
+        <input type="date" id="endDate" name="endDate" min="2020-05-05" max="2022-01-01" value="2020-05-15"><br><br>
+        <label for="title">Title:</label><br>
+        <input type="text" id="title" name="title"><br><br>
+        <input type="submit" value="Generate Report">
+    </form>
+    <hr> 
+    <h2>Actual Report</h2>
+    <table>
+        <tr>
+            <th>Date</th>
+            <th>Field</th>
+            <th>Crop</th>
+            <th>Quantity (lbs)</th>
+            <th>Worker</th>
+        </tr>
+        <tr>
+            <td>2020-05-01</td>
+            <td>Chuau-1</td>
+            <td>Kale</td>
+            <td>50</td>
+            <td>John Doe</td>
+        </tr>
+        <tr>
+            <td>2020-05-05</td>
+            <td>SQ7</td>
+            <td>Broccoli</td>
+            <td>40</td>
+            <td>Jane Smith</td>
+        </tr>
+        <tr>
+            <td>2020-05-10</td>
+            <td>Chuau-1</td>
+            <td>Peas</td>
+            <td>30</td>
+            <td>Michael Johnson</td>
+        </tr>
+    </table>
+</body>
+</html>
+
+
