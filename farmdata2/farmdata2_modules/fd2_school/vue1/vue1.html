@@ -1,5 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
+    <div id="app" v-cloak>
+        <input type="text" v-model="reportTitleInput">
+        <h1>{{ reportTitle }}</h1>
+      </div>
+      
+      <script>
+        var app = new Vue({
+          el: '#app',
+          data: {
+            reportTitle: 'My Sample Harvest Report', 
+            reportTitleInput: 'My Sample Harvest Report' 
+          },
+          watch: {
+            reportTitleInput: function(newValue) {
+              this.reportTitle = newValue;
+            }
+          }
+        });
+      </script>
+      
+      
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
