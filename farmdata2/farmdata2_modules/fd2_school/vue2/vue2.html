@@ -13,6 +13,7 @@
 <body>
  
   <div id="app" v-cloak>
+
     <input type="date" v-model="reportStartDate">
     <input type="date" v-model="reportEndDate">
     <select v-model="selectedCrop">
@@ -54,30 +55,35 @@
   </form>
 
   
-  <hr>
-  <h2>Actual Report</h2>
-  <table>
-    <thead>
-      <tr>
-        <th>Row</th>
-        <th>Date</th>
-        <th>Field</th>
-        <th>Crop</th>
-        <th>Yields</th>
-        <th>Unit</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr v-for="(log, index) in harvestLogs">
-        <td>{{ index + 1 }}</td>
-        <td>{{ log.date }}</td>
-        <td>{{ log.area }}</td>
-        <td>{{ log.crop }}</td>
-        <td>{{ log.yields }}</td>
-        <td>{{ log.unit }}</td>
-      </tr>
-    </tbody>
-  </table>
+    
+    <h2>Actual Report</h2>
+    <div v-if="harvestLogs.length > 0">
+      <table>
+        <thead>
+          <tr>
+            <th>Row</th>
+            <th>Date</th>
+            <th>Field</th>
+            <th>Crop</th>
+            <th>Yields</th>
+            <th>Unit</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(log, index) in harvestLogs">
+            <td>{{ index + 1 }}</td>
+            <td>{{ log.date }}</td>
+            <td>{{ log.area }}</td>
+            <td>{{ log.crop }}</td>
+            <td>{{ log.yields }}</td>
+            <td>{{ log.unit }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div v-else>
+      <p>No matching records found.</p>
+    
 
   <script src="https://unpkg.com/vue@2"></script>
   <script>
@@ -108,3 +114,4 @@
   </script>
 </body>
 </html>
+
