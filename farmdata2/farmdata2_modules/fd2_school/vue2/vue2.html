@@ -13,9 +13,8 @@
 <body>
  
   <div id="app" v-cloak>
-
-    <input type="date" v-model="reportStartDate">
-    <input type="date" v-model="reportEndDate">
+    <input type="date" v-model="reportStartDate" :max="reportEndDate">
+    <input type="date" v-model="reportEndDate" :min="reportStartDate">
     <select v-model="selectedCrop">
       <option v-for="crop in crops" :value="crop">{{ crop }}</option>
     </select>
@@ -46,44 +45,33 @@
       <option v-for="area in areas" :value="area">{{ area }}</option>
     </select><br><br>
     <label for="startDate">Start Date:</label>
-    <input type="date" id="startDate" name="startDate" v-model="reportStartDate" min="2014-01-01" max="2022-01-01" value="2020-05-05"><br><br>
+    <input type="date" id="startDate" name="startDate" v-model="reportStartDate" :max="reportEndDate"><br><br>
     <label for="endDate">End Date:</label>
-    <input type="date" id="endDate" name="endDate" v-model="reportEndDate" min="2020-05-05" max="2022-01-01" value="2020-05-15"><br><br>
+    <input type="date" id="endDate" name="endDate" v-model="reportEndDate" :min="reportStartDate"><br><br>
     <label for="title">Title:</label><br>
     <input type="text" id="title" name="title" v-model="reportTitle"><br><br>
     <input type="button" value="Generate Report" @click="generateReport">
   </form>
 
   
-    
-    <h2>Actual Report</h2>
-    <div v-if="harvestLogs.length > 0">
-      <table>
-        <thead>
-          <tr>
-            <th>Row</th>
-            <th>Date</th>
-            <th>Field</th>
-            <th>Crop</th>
-            <th>Yields</th>
-            <th>Unit</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(log, index) in harvestLogs">
-            <td>{{ index + 1 }}</td>
-            <td>{{ log.date }}</td>
-            <td>{{ log.area }}</td>
-            <td>{{ log.crop }}</td>
-            <td>{{ log.yields }}</td>
-            <td>{{ log.unit }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <div v-else>
-      <p>No matching records found.</p>
-    
+  <hr>
+  <h2>Actual Report</h2>
+  <table>
+    <tr>
+      <th>Date</th>
+      <th>Field</th>
+      <th>Crop</th>
+      <th>Yields</th>
+      <th>Unit</th>
+    </tr>
+    <tr v-for="log in harvestLogs">
+      <td>{{ log.date }}</td>
+      <td>{{ log.area }}</td>
+      <td>{{ log.crop }}</td>
+      <td>{{ log.yields }}</td>
+      <td>{{ log.unit }}</td>
+    </tr>
+  </table>
 
   <script src="https://unpkg.com/vue@2"></script>
   <script>
