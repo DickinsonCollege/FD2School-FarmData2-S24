@@ -50,7 +50,7 @@
     <input type="date" id="endDate" name="endDate" v-model="reportEndDate" min="2020-05-05" max="2022-01-01" value="2020-05-15"><br><br>
     <label for="title">Title:</label><br>
     <input type="text" id="title" name="title" v-model="reportTitle"><br><br>
-    <input type="button" value="Generate Report" onclick="addEmptyRow()">
+    <input type="button" value="Generate Report" @click="generateReport">
   </form>
 
   
@@ -86,18 +86,19 @@
         crops: ["Broccoli", "Kale", "Peas"], 
         areas: ["Chuau-1", "SQ7"], 
         harvestLogs: []
+      },
+      methods: {
+        generateReport: function() {
+          this.harvestLogs.push({
+            date: '',
+            area: '',
+            crop: '',
+            yields: '',
+            unit: ''
+          });
+        }
       }
     });
-
-    function addEmptyRow() {
-      app.harvestLogs.push({
-        date: '',
-        area: '',
-        crop: '',
-        yields: '',
-        unit: ''
-      });
-    }
   </script>
 </body>
 </html>
