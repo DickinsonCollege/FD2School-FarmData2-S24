@@ -31,52 +31,16 @@
     <input type="text" id="title" name="title" v-model="reportTitle"><br><br>
     <h1>{{ reportTitle !== '' ? reportTitle : 'Mock Harvest Report' }}</h1>
 
-    
+ 
     <h3>Farm: {{ farmName }}</h3>
     <h3>User: {{ userName }}</h3>
     <h3>Language: {{ userLanguage }}</h3>
+    
+
+    <input type="button" value="Generate Report" @click="generateReport">
   </div>
 
-  
-  <h2>Harvest Report Form</h2>
-  <form>
-    <label for="crop">Crop:</label>
-    <select id="crop" name="crop" v-model="selectedCrop">
-      <option v-for="crop in crops" :value="crop">{{ crop }}</option>
-    </select><br><br>
-    <label for="field">Area:</label>
 
-    <select id="field" name="field" v-model="selectedArea">
-      <option v-for="area in areas" :value="area">{{ area }}</option>
-    </select><br><br>
-    <label for="startDate">Start Date:</label>
-    <input type="date" id="startDate" name="startDate" v-model="reportStartDate" :max="reportEndDate"><br><br>
-    <label for="endDate">End Date:</label>
-    <input type="date" id="endDate" name="endDate" v-model="reportEndDate" :min="reportStartDate"><br><br>
-    <label for="title">Title:</label><br>
-    <input type="text" id="title" name="title" v-model="reportTitle"><br><br>
-    <input type="button" value="Generate Report" @click="generateReport">
-  </form>
-
-  
-  <hr>
-  <h2>Actual Report</h2>
-  <table>
-    <tr>
-      <th>Date</th>
-      <th>Field</th>
-      <th>Crop</th>
-      <th>Yields</th>
-      <th>Unit</th>
-    </tr>
-    <tr v-for="log in harvestLogs">
-      <td>{{ log.date }}</td>
-      <td>{{ log.area }}</td>
-      <td>{{ log.crop }}</td>
-      <td>{{ log.yields }}</td>
-      <td>{{ log.unit }}</td>
-    </tr>
-  </table>
 
   <script src="https://unpkg.com/vue@2"></script>
   <script>
@@ -97,12 +61,18 @@
       },
       methods: {
         generateReport: function() {
+          
+          this.farmName = "Sample Farm";
+          this.userName = "manager1";
+          this.userLanguage = "English";
+
+          
           this.harvestLogs.push({
-            date: '',
-            area: '',
-            crop: '',
-            yields: '',
-            unit: ''
+            date: this.reportStartDate,
+            area: this.selectedArea,
+            crop: this.selectedCrop,
+            yields: '', 
+            unit: '' 
           });
         }
       }
