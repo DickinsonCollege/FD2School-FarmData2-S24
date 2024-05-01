@@ -49,22 +49,7 @@ Pick a Crop:
     <hr>
     
     <h1 data-cy="page-header">Harvest Report</h1>
-    <table>
-        <tr>
-            <th>Date</th>
-            <th>Field</th>
-            <th>Crop</th>
-            <th>Quantity (lbs)</th>
-            <th>Unit</th>
-        </tr>
-        <tr v-for="log in harvestReportRows">
-            <td>{{ log.date }}</td>
-            <td>{{ log.area }}</td>
-            <td>{{ log.crop }}</td>
-            <td>{{ log.yield }}</td>
-            <td>{{ log.unit }}</td>
-        </tr>
-    </table>
+    <custom-table :columns="tableColumns" :rows="harvestReportRows"></custom-table>
   </div>
 
 
@@ -91,29 +76,39 @@ Pick a Crop:
         cropNames: function() {
           return Array.from(this.idToCropMap.values());
         },
+        tableColumns: function() {
+          return [
+            { header: 'Date', visible: true, editable: false },
+            { header: 'Field', visible: true, editable: false },
+            { header: 'Crop', visible: true, editable: false },
+            { header: 'Quantity (lbs)', visible: true, editable: false },
+            { header: 'Unit', visible: true, editable: false }
+          ];
+        },
         harvestReportRows() {
           let tableRows = [];
           for (let log of this.harvestLogs) {
             let harvestQuantity = log.quantity.find(item => item.label === 'harvest');
             let formattedDate = dayjs.unix(log.timestamp).format('YYYY-MM-DD'); 
             if (this.selectedCrop === 'All' || log.data.crop_tid === this.selectedCropID) { 
-            let tableRow = {
-              date: formattedDate,
-              area: log.area[0].name, 
-              crop: this.idToCropMap.get(log.data.crop_tid) || '', 
-              yield: harvestQuantity ? harvestQuantity.value : '', 
-              unit: harvestQuantity ? harvestQuantity.unit.name : '' 
-            };
-            tableRows.push(tableRow);
+              let tableRow = {
+                date: formattedDate,
+                area: log.area[0].name, 
+                crop: this.idToCropMap.get(log.data.crop_tid) || '', 
+                yield: harvestQuantity ? harvestQuantity.value : '', 
+                unit: harvestQuantity ? harvestQuantity.unit.name : '' 
+              };
+              tableRows.push(tableRow);
+            }
           }
           return tableRows;
         }
       },
 
       components: {
-    'dropdown-with-all': DropdownWithAllComponent,
-},
-
+        'dropdown-with-all': DropdownWithAllComponent,
+        'custom-table': CustomTableComponent
+      },
 
       methods: {
         handleCropSelection(selectedCrop) {
