@@ -18,4 +18,14 @@ describe("Test the harvest report default values", () => {
         cy.get("[data-cy=crop-dropdown]").should("exist");
       });
       
+      it("displays the correct crops in the dropdown", () => {
+        cy.get("[data-cy=crop-dropdown] > [data-cy=dropdown-input]").then(($select) => {
+          cy.wrap($select).children().should("have.length", 111);
+          cy.wrap($select).contains("All");
+          cy.wrap($select).contains("Crop1");
+          cy.wrap($select).contains("Crop5");
+          cy.wrap($select).contains("Crop110");
+        });
+      });
+      
 })
