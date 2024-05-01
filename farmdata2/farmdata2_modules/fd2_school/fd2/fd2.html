@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vue1 Harvest Report</title>
+  <style>
+    [v-cloak] {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+ <ul>
+  <li data-cy="farm-name"><strong>Farm:</strong> Dickinson Farm</li>
+  <li data-cy="user-name"><strong>User:</strong> manager1</li>
+  <span data-cy="language"> english</span>
+
+ </ul>
+  <div id="app" v-cloak>
+    <h2>Harvest Report Form</h2>
+    <form @submit.prevent="generateReport">
+        <label for="crop">Crop:</label>
+        <select id="crop" name="crop" v-model="selectedCrop" data-cy="crop-dropdown">
+          <option v-for="crop in cropNames" :value="crop">{{ crop }}</option>
+        </select><br><br>
+        <label for="field">Area:</label>
+        
+        <select id="field" name="field" v-model="selectedArea">
+          <option v-for="area in areas" :value="area">{{ area }}</option>
+        </select><br><br>
+        <label for="startDate">Start Date:</label>
+        <input type="date" id="startDate" name="startDate" v-model="reportStartDate" min="2014-01-01" max="2022-01-01" value="2020-05-05" data-cy="start-date"><br><br>
+        <label for="endDate">End Date:</label>
+        <input type="date" id="endDate" name="endDate" v-model="reportEndDate" min="2020-05-05" max="2022-01-01" value="2020-05-15" data-cy="end-date"><br><br>
+        <label for="title">Title:</label><br>
+        <input type="text" id="title" name="title" v-model="reportTitle"><br><br>
+        <input type="submit" value="Generate Report" data-cy="generate-report-button">
+    </form>
+
+    <hr>
+    
+    <h1 data-cy="page-header">Harvest Report</h1>
+    <table>
+        <tr>
+            <th>Date</th>
+            <th>Field</th>
+            <th>Crop</th>
+            <th>Quantity (lbs)</th>
+            <th>Unit</th>
+        </tr>
+        <tr v-for="log in harvestReportRows">
+            <td>{{ log.date }}</td>
+            <td>{{ log.area }}</td>
+            <td>{{ log.crop }}</td>
+            <td>{{ log.yield }}</td>
+            <td>{{ log.unit }}</td>
+        </tr>
+    </table>
+  </div>
+
+
+  <script src="https://unpkg.com/vue@2"></script>
+  <script>
+    var app = new Vue({
+      el: '#app',
+      data: {
+        reportStartDate: '', 
+        reportEndDate: '', 
+        selectedCrop: '',
+        selectedArea: '',
+        reportTitle: '',
+        areas: ["Chuau-1", "SQ7"], 
+        harvestLogs: [],
+        idToCropMap: new Map()
+      },
+
+      created() {
+        this.fetchIDToCropMap();
+      },
+
+      computed: {
+        cropNames: function() {
+          return Array.from(this.idToCropMap.values());
+        },
+        harvestReportRows() {
+          let tableRows = [];
+          for (let log of this.harvestLogs) {
+            let harvestQuantity = log.quantity.find(item => item.label === 'harvest');
+            let formattedDate = dayjs.unix(log.timestamp).format('YYYY-MM-DD'); 
+            if (cropName === this.selectedCrop) { 
+            let tableRow = {
+              date: formattedDate,
+              area: log.area[0].name, 
+              crop: this.idToCropMap.get(log.data.crop_tid) || '', 
+              yield: harvestQuantity ? harvestQuantity.value : '', 
+              unit: harvestQuantity ? harvestQuantity.unit.name : '' 
+            };
+            tableRows.push(tableRow);
+          }
+          return tableRows;
+        }
+      },
+
+      methods: {
+        async generateReport() {
+          try {
+            let startDateTimestamp = dayjs(this.reportStartDate).unix();
+            let endDateTimestamp = dayjs(this.reportEndDate).unix();
+            
+            let endpoint = `/log.json?type=farm_harvest&timestamp[ge]=${startDateTimestamp}&timestamp[le]=${endDateTimestamp}`;
+            
+            await getAllPages(endpoint, this.harvestLogs);
+            
+            console.log("Harvest logs between the specified dates:", this.harvestLogs);
+          } catch (error) {
+            console.error("Error fetching harvest logs:", error);
+          }
+        },
+
+        fetchIDToCropMap() {
+          getIDToCropMap()
+            .then((map) => {
+              this.idToCropMap = map;
+            })
+            .catch((error) => {
+              console.error("Error fetching crop map:", error);
+            });
+        }
+      }
+    });
+
+  </script>
+</body>
+</html>
