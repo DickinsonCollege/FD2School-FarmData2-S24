@@ -82,13 +82,14 @@
           let tableRows = [];
           for (let log of this.harvestLogs) {
             let harvestQuantity = log.quantity.find(item => item.label === 'harvest');
-            let formattedDate = dayjs.unix(log.timestamp).format('YYYY-MM-DD'); // Convert timestamp to human-readable date
+            let formattedDate = dayjs.unix(log.timestamp).format('YYYY-MM-DD'); 
+            if (cropName === this.selectedCrop) { 
             let tableRow = {
               date: formattedDate,
-              area: log.area[0].name, // Assuming the area is stored as an array and you need the name property
-              crop: this.idToCropMap.get(log.data.crop_tid) || '', // Get crop name from idToCropMap or set to empty string if not found
-              yield: harvestQuantity ? harvestQuantity.value : '', // Check if harvestQuantity exists
-              unit: harvestQuantity ? harvestQuantity.unit.name : '' // Check if harvestQuantity exists
+              area: log.area[0].name, 
+              crop: this.idToCropMap.get(log.data.crop_tid) || '', 
+              yield: harvestQuantity ? harvestQuantity.value : '', 
+              unit: harvestQuantity ? harvestQuantity.unit.name : '' 
             };
             tableRows.push(tableRow);
           }
