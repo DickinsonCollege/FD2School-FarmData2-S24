@@ -16,7 +16,7 @@
     <h2>Harvest Report Form</h2>
     <form @submit.prevent="generateReport">
         <label for="crop">Crop:</label>
-        <select id="crop" name="crop" v-model="selectedCrop">
+        <select id="crop" name="crop" v-model="selectedCrop" data-cy="crop-dropdown">
           <option v-for="crop in cropNames" :value="crop">{{ crop }}</option>
         </select><br><br>
         <label for="field">Area:</label>
