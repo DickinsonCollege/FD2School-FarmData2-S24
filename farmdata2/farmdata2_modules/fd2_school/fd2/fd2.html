@@ -96,7 +96,7 @@ Pick a Crop:
           for (let log of this.harvestLogs) {
             let harvestQuantity = log.quantity.find(item => item.label === 'harvest');
             let formattedDate = dayjs.unix(log.timestamp).format('YYYY-MM-DD'); 
-            if (cropName === this.selectedCrop) { 
+            if (this.selectedCrop === 'All' || log.data.crop_tid === this.selectedCropID) { 
             let tableRow = {
               date: formattedDate,
               area: log.area[0].name, 
