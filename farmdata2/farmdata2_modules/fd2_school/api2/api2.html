@@ -67,13 +67,14 @@
                 reportFarm: "",
                 reportUser: "",
                 reportLanguage: "",
-                reportStart: "05/01/2018",
-                reportEnd: "05/15/2018",
+                reportStart: "05/05/2020",
+                reportEnd: "05/10/2020",
                 reportCrop: "Kale",
                 //reportCropList: ["Broccoli", "Kale", "Peas"],
                 reportAreaList: ["All", "Chuau-1", "SQ7"],
                 reportTable: [],
                 idToCropMap: new Map (),
+                results: [],
             },
             computed: {
                 cropNames () {
@@ -82,13 +83,15 @@
             },
             methods: {
                 addReportLog: function() {
-                    axios.get('/farm.json')
-
-                    .then((response) => { 
-                        this.reportFarm = response.data.name;
-                        this.reportUser = response.data.user.name;
-                        this.reportLanguage = response.data.languages.en.name;
-                        console.log(response)
+                    let timestampStart = dayjs(this.reportStart).unix()
+                    let timestampEnd = dayjs(this.reportEnd).unix()  
+                    let apiStr = `/log.json?type=farm_harvest&timestamp[ge]=${timestampStart}&timestamp[le]=${timestampEnd}`
+                    getAllPages(apiStr, this.results)
+                    .then(() => { 
+                        //this.reportFarm = response.data.name;
+                        //this.reportUser = response.data.user.name;
+                        //this.reportLanguage = response.data.languages.en.name;
+                        console.log(this.results)
                     }) 
                     .catch((error) => { 
                         console.log("Error Occurred")
