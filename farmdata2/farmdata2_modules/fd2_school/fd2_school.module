@@ -60,7 +60,7 @@ function fd2_school_menu() {
     'weight' => -100,
   );
 
-  $items['farm/fd2-school/html'] = array (
+  $items['farm/fd2-school/HTML/HTML.html'] = array (
     'title' => 'HTML',
     'type' => MENU_LOCAL_TASK,
     'page callback' => 'fd2_school_view',
@@ -69,7 +69,7 @@ function fd2_school_menu() {
     'weight' => 110
   );
 
-    $items['farm/fd2-school/vue1'] = array (
+    $items['farm/fd2-school/vue1/vue1.html'] = array (
     'title' => 'Vue1',
     'type' => MENU_LOCAL_TASK,
     'page callback' => 'fd2_school_view',
@@ -78,7 +78,7 @@ function fd2_school_menu() {
     'weight' => 120
     );
 
-      $items['farm/fd2-school/vue2'] = array (
+      $items['farm/fd2-school/vue2/vue2.html'] = array (
     'title' => 'Vue2',
     'type' => MENU_LOCAL_TASK,
     'page callback' => 'fd2_school_view',
@@ -87,7 +87,7 @@ function fd2_school_menu() {
     'weight' => 130
       );
 
-        $items['farm/fd2-school/API'] = array (
+        $items['farm/fd2-school/API/api.html'] = array (
     'title' => 'API',
     'type' => MENU_LOCAL_TASK,
     'page callback' => 'fd2_school_view',
