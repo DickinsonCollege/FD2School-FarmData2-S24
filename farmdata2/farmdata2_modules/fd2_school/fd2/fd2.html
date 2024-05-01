@@ -21,9 +21,17 @@
     <h2>Harvest Report Form</h2>
     <form @submit.prevent="generateReport">
         <label for="crop">Crop:</label>
-        <select id="crop" name="crop" v-model="selectedCrop" data-cy="crop-dropdown">
-          <option v-for="crop in cropNames" :value="crop">{{ crop }}</option>
-        </select><br><br>
+        <dropdown-with-all
+    data-cy="crop-dropdown"
+    :includes-all="true"
+    :selected-val="selectedCrop"
+    :dropdown-list="cropNames"
+    @selection-changed="handleCropSelection"
+    :disabled="false"
+>
+Pick a Crop:
+</dropdown-with-all>
+<br><br>
         <label for="field">Area:</label>
         
         <select id="field" name="field" v-model="selectedArea">
@@ -67,7 +75,7 @@
       data: {
         reportStartDate: '', 
         reportEndDate: '', 
-        selectedCrop: '',
+        selectedCrop: 'All',
         selectedArea: '',
         reportTitle: '',
         areas: ["Chuau-1", "SQ7"], 
@@ -102,7 +110,15 @@
         }
       },
 
+      components: {
+    'dropdown-with-all': DropdownWithAllComponent,
+},
+
+
       methods: {
+        handleCropSelection(selectedCrop) {
+            this.selectedCrop = selectedCrop;
+        },
         async generateReport() {
           try {
             let startDateTimestamp = dayjs(this.reportStartDate).unix();
