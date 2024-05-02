@@ -22,9 +22,9 @@
         <input type="text" id="report-title" name="title" v-model="reportTitle">
         <br>
         <label for="start-date">Start:</label>
-        <input type="date" id="start-date" name="start-date" v-model="startDate" :max="endDate" value="2020-05-05">
+        <input type="date" id="start-date" name="start-date" v-model="startDate" :max="endDate" value="2020-05-05" data-cy="start-date">
         <label for="end-date">End:</label>
-        <input type="date" id="end-date" name="end-date" v-model="endDate" :min="startDate" value="2020-05-15">
+        <input type="date" id="end-date" name="end-date" v-model="endDate" :min="startDate" value="2020-05-15" data-cy="end-date">
         <br>
         <label for="crop">Crop:</label>
         <select name="crop" id="crop" v-model="selectedCrop">
