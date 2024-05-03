@@ -40,13 +40,13 @@ describe("Test Seeding Input Default Type", () => {
       /** Check the form elements for either the "Tray" and 
     "Direct" seedings are not visible or do not exist. */
 
-    it("Check form elements of Tray is not visible or not exist", () => { 
+    it("5) Check form elements of Tray is not visible or not exist", () => { 
         cy.get("[data-cy=tray-area-selection]").should("not.be.visible")
         cy.get("[data-cy=num-cell-input]").should("not.be.visible")
         cy.get("[data-cy=num-tray-input]").should("not.be.visible")
         cy.get("[data-cy=num-seed-input]").should("not.be.visible")
     }) 
-    it("Check form elements of Direct is not visible or not exist", () => { 
+    it("5) Check form elements of Direct is not visible or not exist", () => { 
         cy.get("[data-cy=direct-area-selection]").should("not.be.visible")
         cy.get("[data-cy=num-rowbed-input]").should("not.be.visible")
         cy.get("[data-cy=unit-feet]").should("not.be.visible")
