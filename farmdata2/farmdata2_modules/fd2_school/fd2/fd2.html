@@ -26,10 +26,14 @@
         <label for="end-date">End:</label>
         <input type="date" id="end-date" name="end-date" v-model="endDate" :min="startDate" value="2020-05-15" data-cy="end-date">
         <br>
-        <label for="crop">Crop:</label>
-        <select data-cy="crop-list" v-model="reportSelectedCrop" id="crop" name="crop">
-            <option v-for="crops in cropNames" :value="crops">{{ crops }}</option>
-        </select>
+        <dropdown-with-all data-cy="crop-list"
+            includes-all
+            :selected-val="reportSelectedCrop"
+            :dropdown-list="cropNames"
+            @selection-changed="cropChange"
+            >
+        Crop: 
+        </dropdown-with-all>
         <label for="field">Area:</label>
         <select name="field" id="field" v-model="selectedArea">
             <option v-for="area in areas" :value="area">{{ area }}</option>
@@ -70,12 +74,15 @@
     <script>
         var harvestReport = new Vue({
             el: '#harvest-report',
+            components: {
+                'dropdown-with-all': DropdownWithAllComponent,
+            },
             data: {
                 reportTitle: '',
                 startDate: '2020-05-05',
                 endDate: '2020-05-15',
-                selectedCrop: 'kale',
-                selectedArea: 'all', 
+                reportSelectedCrop: "All",
+                reportSelectedArea: "",
                 areas: ['All', 'Chuau-1', 'SQ7'],
                 harvestLogs: [],
                 farm: '',
@@ -118,6 +125,10 @@
 
             },
             methods: {
+                cropChange(newCrop) {
+                    this.reportSelectedCrop = newCrop
+                },
+                
                 generateReport: function() {
                     let startTimestamp = dayjs(this.startDate).unix();
                     let endTimestamp = dayjs(this.endDate).unix();
