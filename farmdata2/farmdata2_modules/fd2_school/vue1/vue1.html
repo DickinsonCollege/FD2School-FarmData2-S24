@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Harvest Report</title>
+    <style>
+        h1 {
+            font-size: 24px; 
+        }
+        ul {
+            padding-left: 20px;
+        }
+        li strong {
+            font-weight: bold; 
+        }
+    </style>
+</head>
+<body>
+    <div id="harvest-report" v-cloak>
+        <h1>{{ reportTitle ? reportTitle : 'Mock Harvest Report' }}</h1> 
+        <p>This page is a <em>mockup</em> of a simplified harvest report.</p> 
+        <label for="report-title">Title:</label>
+        <input type="text" id="report-title" name="title" v-model="reportTitle">
+        <br>
+        <label for="start-date">Start:</label>
+        <input type="date" id="start-date" name="start-date" v-model="startDate" min="2014-01-01" max="2022-01-01" value="2020-05-05">
+        <label for="end-date">End:</label>
+        <input type="date" id="end-date" name="end-date" v-model="endDate" min="2020-05-05" max="2022-01-01" value="2020-05-15">
+        <br>
+        <label for="crop">Crop:</label>
+        <select name="crop" id="crop" v-model="selectedCrop">
+            <option v-for="crop in crops" :value="crop">{{ crop }}</option>
+        </select>
+        <label for="field">Area:</label>
+        <select name="field" id="field" v-model="selectedArea">
+            <option v-for="area in areas" :value="area">{{ area }}</option>
+        </select>
+        <br>
+        <button type="button">Generate Report</button>
+        <br>
+        <hr> 
+        <h1>{{ reportTitle ? reportTitle : 'Mock Harvest Report' }}</h1> 
+    
+        <p>Details:</p>
+        <table border="1">
+            <tr>
+                <th>Date</th>
+                <th>Area</th>
+                <th>Crop</th>
+                <th>Yield</th>
+                <th>Units</th>  
+            </tr>
+            <tr v-for="log in harvestLogs">
+                <td>{{ log.date }}</td>
+                <td>{{ log.area }}</td>
+                <td>{{ log.crop }}</td>
+                <td>{{ log.yield }}</td>
+                <td>{{ log.units }}</td>
+            </tr>
+        </table>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <script>
+        var harvestReport = new Vue({
+            el: '#harvest-report',
+            data: {
+                reportTitle: '',
+                startDate: '2020-05-05',
+                endDate: '2020-05-15',
+                selectedCrop: 'kale',
+                selectedArea: 'all', 
+                crops: ['Broccoli', 'Kale', 'Peas'],
+                areas: ['All', 'Chuau-1', 'SQ7'],
+                harvestLogs: [
+                    { date: '2018-05-02', area: 'Chuau-1', crop: 'Kale', yield: 10, units: 'Bunches' },
+                    { date: '2018-05-05', area: 'SQ7', crop: 'Kale', yield: 7, units: 'Bunches' }
+                ]
+            }
+        });
+
+        Vue.config.devtools = true;
+    </script>
+</body>
+</html>
