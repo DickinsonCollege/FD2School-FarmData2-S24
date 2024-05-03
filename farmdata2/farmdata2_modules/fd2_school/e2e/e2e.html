@@ -27,8 +27,8 @@
         <input type="date" id="end-date" name="end-date" v-model="endDate" :min="startDate" value="2020-05-15" data-cy="end-date">
         <br>
         <label for="crop">Crop:</label>
-        <select name="crop" id="crop" v-model="selectedCrop">
-            <option v-for="crop in cropNames" :value="crop">{{ crop }}</option>
+        <select data-cy="crop-list" v-model="reportSelectedCrop" id="crop" name="crop">
+            <option v-for="crops in cropNames" :value="crops">{{ crops }}</option>
         </select>
         <label for="field">Area:</label>
         <select name="field" id="field" v-model="selectedArea">
