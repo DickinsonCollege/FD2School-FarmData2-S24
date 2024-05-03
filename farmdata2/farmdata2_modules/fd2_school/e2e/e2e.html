@@ -35,7 +35,7 @@
             <option v-for="area in areas" :value="area">{{ area }}</option>
         </select>
         <br>
-        <button type="button" @click="generateReport">Generate Report</button>
+        <button data-cy="generate-report" type="button" @click="generateReport">Generate Report</button>
         <br>
         <hr> 
         <h1>{{ reportTitle ? reportTitle : 'Mock Harvest Report' }}</h1> 
