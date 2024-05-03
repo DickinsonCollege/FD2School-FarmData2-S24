@@ -1,14 +1,13 @@
 <body>
     <div id="seedingReport" v-cloak>
-        <h1 class="text-center">Seeding Report</h1>
+        <h1 class="text-center" data-cy="report-header">Seeding Report</h1>
         <error-banner data-cy="alert-err-handler" :visible="errBannerVisibility"></error-banner>
         <fieldset :disabled="rowBeingEdited" class="panel panel-default center-block" style="width: 50%;">
-            <legend class="panel-heading" style="background-color: #d62a17; color: white;">Set Dates</legend>
+            <legend class="panel-heading" style="background-color: #d62a17; color: white;" data-cy="date-selection-header">Set Dates</legend>
             <div style="display: flex;width: 100%; padding: 7px">
                 <date-range-selection data-cy="date-range-selection" class="center-block" @start-date-changed='startDateChange' @end-date-changed='endDateChange' 
                 @click='hide'
                 :set-start-date='startDate' :set-end-date='endDate'></date-range-selection>
-
                 <button data-cy="generate-rpt-btn" class="btn center-block btn-primary" v-if='!reportVisible' @click='seedingLogRequestWithDates'>Generate Report</button>
             </div>
         </fieldset>
@@ -19,7 +18,7 @@
                 <fieldset :disabled="rowBeingEdited" data-cy="filters-panel" class="center-block panel panel-default" style="width: 75%;">
                     <legend class="panel-heading" style="background-color: #d62a17; color: white;">Filters</legend>
                     <div :style=" !isMobile ? 'display: flex;width: 100%; padding: 7px' : 'display: grid; width: 100%'">
-                        <dropdown-with-all data-cy="seeding-type-dropdown" class="center-block" :dropdown-list='seedingTypeList' includes-all selected-val='All' @selection-changed='seedingChange'>Seeding Type:</dropdown-with-all>
+                        <dropdown-with-all data-cy="seeding-type-dropdown" class="center-block" :dropdown-list='seedingTypeList' includes-all :selected-val='getDefaultSeedingSelection()' @selection-changed='seedingChange'>Seeding Type:</dropdown-with-all>
                     
                         <dropdown-with-all data-cy="crop-dropdown" class="center-block" :dropdown-list='cropList' includes-all selected-val='All' @selection-changed='cropChange'>Crop:</dropdown-with-all>
 
@@ -39,9 +38,7 @@
                 <div style="display: flex; width: 100%;">
                     <fieldset data-cy="direct-summary" class="center-block panel panel-default" style="width: 50%;" v-if="!(selectedSeeding=='Tray Seedings')">
                         <legend class="panel-heading" style="background-color: #d62a17; color: white;">Direct Seeding Summary</legend>
-                        <div v-if="getTableOneType == 'Tray'">
-                            <p style="margin-left: 5%;" data-cy='direct-no-logs'>There are no Direct Seeding logs with these parameters</p>
-                        </div>
+                        <div v-if="getDefaultSeedingSelection === 'Direct Seedings'"></div>
                         <div v-else>
                             <p style="margin-left: 5%;">Total Row Feet Planted: <b><span data-cy='direct-total-rowft'>{{ totalRowFeet }}</span></b></p>
                             <p style="margin-left: 5%;">Total Bed Feet Planted: <b><span data-cy='direct-total-bedft'>{{ totalBedFeet }}</span></b></p>
@@ -52,9 +49,7 @@
                     </fieldset>
                     <fieldset data-cy="tray-summary" class="center-block panel panel-default" style="width: 47%;" v-if="!(selectedSeeding=='Direct Seedings')">
                         <legend class="panel-heading" style="background-color: #d62a17; color: white;">Tray Seeding Summary</legend>
-                        <div v-if="getTableOneType == 'Direct'">
-                            <p style="margin-left: 5%;" data-cy='tray-no-logs'>There are no Tray Seeding logs with these parameters</p>
-                        </div>
+                        <div v-if="getDefaultSeedingSelection === 'Tray Seedings'"></div>   
                         <div v-else>
                             <p style="margin-left: 5%;">Total Number of Seeds Planted: <b><span data-cy='tray-total-seeds'>{{ traySeedsPlanted }}</span></b></p>
                             <p style="margin-left: 5%;">Total Number of Trays: <b><span data-cy='tray-total-trays'>{{ totalNumTrays }}</span></b></p>
@@ -375,6 +370,16 @@
                 enableFilters(){
                     this.rowBeingEdited = false
                 },
+                getDefaultSeedingSelection(){
+                    if(!this.seedingTypeList.includes("Tray Seedings")){
+                        this.selectedSeeding = "Direct Seedings"
+                        return 'Direct Seedings'
+                    }else if(!this.seedingTypeList.includes("Direct Seedings")){
+                        this.selectedSeeding = "Tray Seedings"
+                        return 'Tray Seedings'
+                    }
+                    return 'All'
+                },
             },
             computed: {
                 /**
@@ -568,7 +573,7 @@
                     tableData.map(h => {
                         sumBedFeet = sumBedFeet + parseFloat(h.data[5])
                     })
-                    return sumBedFeet
+                    return Math.round(sumBedFeet)
                 },
                 /**
                  * returns the total bed feet for Direct Seeding excluding the logs without labor data
@@ -581,7 +586,7 @@
                             sumBedFeet = sumBedFeet + parseFloat(h.data[5])
                         }
                     })
-                    return sumBedFeet
+                    return Math.round(sumBedFeet)
                 },
                 /**
                  * returns the total hours worked for direct seedings. Calculated by mulpitplying hours by workers for each log
