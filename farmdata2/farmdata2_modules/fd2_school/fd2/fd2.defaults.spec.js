@@ -4,13 +4,10 @@ describe("Test the harvest report default values", () => {
         cy.visit("/farm/fd2-school/e2e");
     });
 
-    it("Check report details", () => {
-        cy.get("[data-cy=farm-name]").should("not.exist")
-        cy.get("[data-cy=language]").should("not.exist")
-        cy.get("[data-cy=user]").should("not.exist")
-        cy.get("[data-cy=generate-report]").click()
-        cy.get("[data-cy=farm-name]").should("have.text","Farm:  Sample Farm")
-        cy.get("[data-cy=language]").should("have.text","en")
-        cy.get("[data-cy=user]").should("have.text","manager1")
+    it("Check crop list", () => {
+        cy.get("[data-cy=crop-list] > [data-cy=dropdown-input] > [data-cy=option0]").should("have.text", "All")
+        cy.get("[data-cy=crop-list] > [data-cy=dropdown-input] > [data-cy=option1]").should("have.text", "ARUGULA")
+        cy.get("[data-cy=crop-list] > [data-cy=dropdown-input] > [data-cy=option5]").should("have.text", "BEAN-FAVA")
+        cy.get("[data-cy=crop-list] > [data-cy=dropdown-input]").children().should("have.length", "112")
     })
 });
