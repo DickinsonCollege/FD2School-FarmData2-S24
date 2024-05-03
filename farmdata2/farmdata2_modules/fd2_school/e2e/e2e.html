@@ -60,9 +60,10 @@
             </tr>
         </table>
 
-        <p>Farm: {{ farm }}</p>
-        <p>User: {{ user }}</p>
-        <p>Language: {{ language }}</p>
+        <li data-cy="farm-name"><strong>Farm: </strong> {{ farm }}</li>
+        <li><strong>User: </strong><span data-cy="user">{{ user }}</span></li>
+        <li><strong>Language: </strong><span data-cy="language">{{ language }}</span></li>
+        
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
