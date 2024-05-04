@@ -26,4 +26,11 @@ describe("Test the table", () => {
 
 })
 
+    it("Check the crop filtering for ZUCCHINI", () => {
+        cy.get("[data-cy=crop-list] > [data-cy=dropdown-input]").select("ZUCCHINI")
+        cy.get("[data-cy=generate-report-button]").click()
+        cy.wait(5000)
+        cy.get("[data-cy=table-body]").children().should("have.length", "6")
+        
+
 })
