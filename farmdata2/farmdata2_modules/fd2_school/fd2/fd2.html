@@ -14,12 +14,12 @@
     </label>
     <br />
     <br />
-    <label>
-        Crop:
-        <select data-cy="crop-list" id="crop" name="crop" v-model="crop">
-            <option v-for="crop in cropNames">{{ crop }}</option>
-        </select>
-    </label>
+    <dropdown-with-all data-cy="crop-list"
+        includes-all
+        :selected-val="crop"
+        :dropdown-list="cropNames"
+        @selection-changed="changeCrop"
+        > Crop: </dropdown-with-all>
     <label>
         Area:
         <select id="area" name="area">
@@ -109,6 +109,10 @@
 
         },
 
+        components: {
+        'dropdown-with-all': DropdownWithAllComponent,
+    },
+
         data: {
             header: null,
             startDate: "2020-05-05",
@@ -123,7 +127,7 @@
                 "SQ7",
             ],
             logs: [],
-            crop: "",
+            crop: "All",
         },
 
         methods: {
@@ -151,8 +155,15 @@
                     .catch((error) => {
                         console.log("Error occurred related to getAllPages function")
                         console.log(error);
-                    })
-            }
+                    }) 
+
+                    
+            } ,
+            
+            changeCrop: function(newCrop) {
+                        this.crop = newCrop
+                    } 
+
         }
 
     })
