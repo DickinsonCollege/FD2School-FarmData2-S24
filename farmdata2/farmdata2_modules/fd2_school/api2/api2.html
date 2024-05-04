@@ -30,8 +30,7 @@
         </div>
         <br>
     </form>
-    <button @click="logHarvest(); changeReportState('show')"; setFarmUserLang()>Generate Report</button>
-
+    <button @click="logHarvest(); changeReportState('show'); setFarmUserLang(); makeRequest()">Generate Report</button>
 
     <hr>
 
@@ -49,7 +48,7 @@
         </ul>
         <br>
         <table border="1">
-            <tr v-if="harvestLogs.length >= 0">
+            <tr v-if="harvestLogs.length > 0">
                 <th>Row</th>
                 <th>Date</th>
                 <th>Area</th>
@@ -105,14 +104,14 @@
             cropNames() {
                 cropNames = []
                 for (const name of this.idToCropMap.values())   {
-                    cropNames.push(name);
+                    cropNames.push(name)
                 }
                 return cropNames
             },
             areaNames() {
                 areaNames = []
                 for (const name of this.idToAreaMap.values())   {
-                    cropArea.push(area);
+                    cropArea.push(area)
                 }
                 return areaNames
             }
@@ -148,6 +147,36 @@
                     console.log(error)
                 })
             },
+            created() {
+                getIDToCropMap()
+                .then((theMap) => {
+                    this.idToCropMap = theMap
+                })
+                .catch((error) => {
+                    console.log("Error occurs")
+                    console.log(error)
+                }),
+                getIDToAreaMap()
+                .then((theMap) => {
+                    this.idToAreaMap = theMap
+                })
+                .catch((error) => {
+                    console.log("Error occurs")
+                    console.log(error)
+                })
+            },
+            makeRequest: function() {
+                let startDate = dayjs(this.reportStartDate).unix()
+                let endDate = dayjs(this.reportEndDate).unix()
+                let request = `/log.json?type=farm_harvest&timestamp[ge]=${startDate}&timestamp[le]=${endDate}`
+                getAllPages(request, this.harvestLogs)
+                .then(() => {
+                    console.log('working')
+                })
+                .catch((err) => {
+                    console.log(error)
+                })
+            }
         }
     }) 
     Vue.config.devtools = true;
