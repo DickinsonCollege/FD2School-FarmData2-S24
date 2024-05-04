@@ -17,5 +17,13 @@ describe("Test the table", () => {
    
 
 })
+    it("Check the table columns", () => {
+        cy.get("[data-cy=generate-report-button]").click()
+
+        cy.wait(5000)
+        cy.get("[data-cy=table-headers]").children().should("have.length", "6")
+
+
+})
 
 })
