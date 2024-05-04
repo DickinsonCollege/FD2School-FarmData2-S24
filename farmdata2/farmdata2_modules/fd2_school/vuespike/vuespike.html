@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Shopping List App</title>
+  <link rel="stylesheet" href="main.css">
+  <style>
+    [v-cloak] {
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="shopping-list" v-cloak>
+    <div class="header">
+    <h1>{{ header.toLocaleUpperCase() }}</h1>
+    <button v-if="state === 'default'" class="btn btn-primary" @click="changeState('edit')">Add Item</button>
+    <button v-else class="btn btn-cancel" @click="changeState('default')">Cancel Item</button>
+    </div>
+    <div v-if="state === 'edit'" class="add-item-form">
+    <input type="text" v-model="newItem" placeholder="Add an item" @keyup.enter="saveItem"> 
+    <button class="btn btn-primary" v-bind:disabled="newItem.length === 0" @click="saveItem">Save Item</button>
+    </div>
+    <ul>
+      <li v-for="(item, index) in items">{{ item + " (" + index + ")" }}</li>
+    </ul> 
+    <p v-if="items.length === 0">Nice job! You've bought all your items.</p>
+  </div>
+  <script src="https://unpkg.com/vue@2"></script>
+  <script>
+    var shoppingList = new Vue({
+      el: "#shopping-list",
+      data: {
+        state: "default" ,
+        header: "Shopping List App",
+        newItem: "",
+        items: [
+          "10 party hats",
+          "2 board games",
+          "20 cups",
+
+        ],
+
+
+      } ,
+
+      methods: {
+          saveItem: function() {
+            if (this.newItem == "") {
+              this.items.push(this.newItem);
+              this.items.pop();
+            }
+            else {
+              this.items.push(this.newItem);
+              this.newItem = "";
+            }
+            
+          } ,
+          changeState: function(newState) {
+            this.state = newState;
+            this.newItem = "";
+          }
+        }
+
+    })
+  </script>
+</body>
+
+</html>

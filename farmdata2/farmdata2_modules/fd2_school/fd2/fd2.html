@@ -1,0 +1,165 @@
+<h1 data-cy="page-header">Harvest Report</h1>
+<p>This page is a <i>mockup</i> of a simplified harvest report.</p>
+<div id="report-title" v-cloak>
+    <p>Title: <input type="text" size="21" v-model="header" /></p>
+    <br />
+    <label>
+        Start:
+        <input data-cy="start-date" type="date" id="start_date" v-model="startDate" name="start_date" v-bind:max="endDate"
+            value="2020-05-05" />
+    </label>
+    <label>
+        End:
+        <input data-cy="end-date" type="date" id='end_date' v-model="endDate" name="end_date" v-bind:min="startDate" value="2020-05-15" />
+    </label>
+    <br />
+    <br />
+    <dropdown-with-all data-cy="crop-list"
+        includes-all
+        :selected-val="crop"
+        :dropdown-list="cropNames"
+        @selection-changed="changeCrop"
+        > Crop: </dropdown-with-all>
+    <label>
+        Area:
+        <select id="area" name="area">
+            <option v-for="area in areas">{{ area }}</option>
+        </select>
+    </label>
+    <br />
+    <br />
+    <button data-cy="generate-report-button" type="button" @click="addReport">Generate Report</button>
+    <hr />
+    <h1 data-cy="report-title">{{ header == "" ? "Mock Harvest Report" : header }}</h1>
+    <p>Details:</p>
+    <ul>
+        <li data-cy="farm-name"><strong>Farm:</strong>{{ farm }}</li>
+        <li data-cy="user-name" ><strong>User:</strong>{{ user }}</li>
+        <li><strong>Language:</strong><span data-cy="language">{{ language }}</span></li>
+    </ul>
+    <br />
+    <ul>
+        <li><strong>Start:</strong>05/01/2018</li>
+        <li><strong>End:</strong>05/15/2018</li>
+        <li><strong>Crop:</strong>Kale</li>
+    </ul>
+
+    <custom-table data-cy="report-table"
+        :columns="columns"
+        :rows="harvestReportRows">
+    </custom-table>
+    
+    <p v-else>There are no matching records found.</p>
+</div>
+<script>
+    var reportTitle = new Vue({
+        el: "#report-title",
+        created() {
+            console.log("HarvestReport Vue instance created!")
+            getIDToCropMap()
+                .then((theMap) => {
+                    console.log("Map received")
+                    this.idToCropMap = theMap
+                })
+
+                .catch((err) => {
+                    console.log("Error Occurred")
+                    console.log(error)
+                })
+
+
+        },
+
+        computed: {
+            cropNames() {
+                return Array.from(this.idToCropMap.values());
+            } ,
+            harvestReportRows() {
+                let tableRows = []
+                for (let log of this.logs) {
+                    let cropName = this.idToCropMap.get(log.data.crop_tid)
+                    if (cropName === this.crop || this.crop == "All") {
+                        let tableRow = {
+                            date: dayjs.unix(log.timestamp).format('MM/DD/YYYY'),
+                            area: log.area[0].name,
+                            crop: cropName,
+                            yield: log.quantity[0].value,
+                            units: log.quantity[0].unit.name,
+                    }
+                    tableRows.push(tableRow);
+                    }
+
+                }
+                return tableRows
+            }
+
+        },
+
+        components: {
+        'dropdown-with-all': DropdownWithAllComponent,
+    },
+
+        data: {
+            header: null,
+            startDate: "2020-05-05",
+            endDate: "2020-05-15",
+            farm: "",
+            user: "",
+            language: "",
+            idToCropMap: new Map(),
+            areas: [
+                "All",
+                "Chuau-1",
+                "SQ7",
+            ],
+            logs: [],
+            crop: "All",
+            columns: [
+                {"header": 'Row', "visible": true, "inputType": {'type': 'no input'}},
+                {"header": 'Date', "visible": true, "inputType": {'type': 'text'}},
+                {"header": 'Area', "visible": true, "inputType": {'type': 'text'}},
+                {"header": 'Crop', "visible": true, "inputType": {'type': 'text'}},
+                {"header": 'Yield', "visible": true, "inputType": {'type': 'text'}},
+                {"header": 'Units', "visible": true, "inputType": {'type': 'text'}},
+            ] ,
+        },
+
+        methods: {
+            addReport: function () {
+                axios.get('/farm.json')  // this line sends the request.
+                    .then((response) => {
+                        this.farm = response.data.name;
+                        this.user = response.data.user.name;
+                        this.language = response.data.languages.en.name;
+                    })
+                    .catch((error) => {
+                        console.log("Error Occurred")
+                        console.log(error);
+                    })
+                let startTimeStamp = dayjs(this.startDate).unix()
+
+                let endTimeStamp = dayjs(this.endDate).unix()
+
+                let stringRequest = "/log.json?type=farm_harvest&timestamp[ge]=" + startTimeStamp + "&timestamp[le]=" + endTimeStamp
+
+                this.header = "My Sample Harvest Report"
+                getAllPages(stringRequest, this.logs)
+                    .then(() => {
+                    })
+                    .catch((error) => {
+                        console.log("Error occurred related to getAllPages function")
+                        console.log(error);
+                    }) 
+
+                    
+            } ,
+
+            changeCrop: function(newCrop) {
+                        this.crop = newCrop
+                    } 
+
+        }
+
+    })
+    Vue.config.devtools = true;
+</script>
