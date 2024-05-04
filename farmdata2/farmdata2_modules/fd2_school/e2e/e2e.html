@@ -28,9 +28,9 @@
     </label>
     <br />
     <br />
-    <button type="button" @click="addReport">Generate Report</button>
+    <button data-cy="generate-report-button" type="button" @click="addReport">Generate Report</button>
     <hr />
-    <h1>{{ header == "" ? "Mock Harvest Report" : header }}</h1>
+    <h1 data-cy="report-title">{{ header == "" ? "Mock Harvest Report" : header }}</h1>
     <p>Details:</p>
     <ul>
         <li><strong>Farm:</strong>{{ farm }}</li>
@@ -110,7 +110,7 @@
         },
 
         data: {
-            header: "My Sample Harvest Report",
+            header: null,
             startDate: "2020-05-05",
             endDate: "2020-05-15",
             farm: "",
@@ -144,6 +144,7 @@
 
                 let stringRequest = "/log.json?type=farm_harvest&timestamp[ge]=" + startTimeStamp + "&timestamp[le]=" + endTimeStamp
 
+                this.header = "My Sample Harvest Report"
                 getAllPages(stringRequest, this.logs)
                     .then(() => {
                     })
