@@ -1,24 +1,21 @@
-describe("Test the harvest report default values", () => {
+describe("Test the table", () => {
     beforeEach(() => {
         cy.login("manager1", "farmdata2")
         cy.visit("/farm/fd2-school/fd2")
     })
       
-    it("Check the page header", () => {
-        cy.get("[data-cy=page-header]").should("have.text","Harvest Report")
-    })
-    it("Check the start date and end date", () => {
-        cy.get("[data-cy=start-date]").should("have.value","2020-05-05")
-        cy.get("[data-cy=end-date]").should("have.value","2020-05-15")
-    })
-    it("Check the crop list", () => {
-        cy.get("[data-cy=crop-list] > [data-cy=dropdown-input] > [data-cy=option1]")
-        .should("have.value", "ARUGULA")
-        cy.get("[data-cy=crop-list] > [data-cy=dropdown-input] > [data-cy=option5]")
-        .should("have.value", "BEAN-FAVA")
-        cy.get("[data-cy=crop-list] > [data-cy=dropdown-input] > [data-cy=option111]")
-        .should("have.value", "ZUCCHINI")
-        cy.get("[data-cy=crop-list] > [data-cy=dropdown-input]").children()
-        .should("have.length", "112")    })
+    it("Check the table headers", () => {
+        cy.get("[data-cy=generate-report-button]").click()
+
+        cy.wait(5000)
+        cy.get("[data-cy=h0]").should("have.text","Row")
+        cy.get("[data-cy=h1]").should("have.text","Date")
+        cy.get("[data-cy=h2]").should("have.text","Area")
+        cy.get("[data-cy=h3]").should("have.text","Crop")
+        cy.get("[data-cy=h4]").should("have.text","Yield")
+        cy.get("[data-cy=h5]").should("have.text","Units")
+   
+
+})
 
 })
