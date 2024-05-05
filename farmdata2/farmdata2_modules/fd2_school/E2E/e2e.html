@@ -9,15 +9,15 @@
 
     <div id="report" v-cloak>
         <label for="title">Title:</label>
-        <input type="text" id="title" name="title" v-model="reportTitle"/>
+        <input type="text" id="title" name="title" v-model="reportTitle" data-cy="title"/>
         <br>
-        
+        <br>
         <label for="start-date">Start:</label>
         <input data-cy="start-date" type="date" id="start-date" name="start-date" :min="reportStartDate" :max="reportEndDate" v-model="reportStartDate"/>
         <label for="end-date">End:</label>
         <input data-cy="end-date" type="date" id="end-date" name="end-date" :min="reportStartDate" max="reportEndDate" v-model="reportEndDate"/>
         <br>
-        
+        <br>
         <label for="crop">Crop:</label>
         <select id="crop" name="crop" v-model="reportCrop" data-cy="crop">
             <option v-for="crop in cropNames">{{ crop }}</option>
@@ -27,8 +27,8 @@
             <option v-for="area in areaNames">{{ area }}</option>
         </select>
         <br>
-        
-        <button data-cy="generate-report-button" type="button" @click="generateReport">Generate Report</button>
+        <br>
+        <button type="button" @click="generateReport" data-cy="generate-report-button">Generate Report</button>
         <hr>
 
         <h1 data-cy="report-title" v-if="hasTitle">{{ reportTitle }}</h1>
@@ -52,7 +52,7 @@
                 <th>Crop</th>
                 <th>Yield</th>
                 <th>Units</th>
-                
+                <th>Delete</th>
             </tr>
             <tr v-for="(log,index) in harvestReportRows">
                 <td>{{ index + 1}}</td>
@@ -61,18 +61,19 @@
                 <td>{{ log.crop }}</td>
                 <td>{{ log.yield }}</td>
                 <td>{{ log.units }}</td>
+                <td><button type="button" @click="deleteRow">Delete</button></td>
             </tr>
         </table>
-        <p v-if="harvestReportRows.length === 0">There are no matching records!</p>
+        <p v-if="harvestReportRows.length === 0" data-cy="no-record-message">There are no matching records!</p>
     </div>
-    
+
     <script>
         var report = new Vue ({
             el: "#report",
             data: {
                 reportTitle: "My Sample Harvest Report",
-                reportStartDate: "05/05/2020",
-                reportEndDate: "05/15/2020",
+                reportStartDate: "2020-05-05",
+                reportEndDate: "2020-05-15",
                 reportCrop: "All",
                 reportArea: "All",
                 harvestLogs: [],
@@ -129,7 +130,7 @@
                             console.log("Error Occurred");
                             console.log(error);
                          })
-
+                    
                     let timestampStart = dayjs(this.reportStartDate).unix();
                     let timestampEnd = dayjs(this.reportEndDate).unix();
                     let request = "/log.json?type=farm_harvest&timestamp[ge]=" + timestampStart + "&timestamp[le]=" + timestampEnd;
@@ -141,10 +142,12 @@
                             console.log("Error Occurred");
                             console.log(error);
                          })
+
+                    this.hasTitle = true; // display the report title when the button is clicked
                     
-                    this.hasTitle = true;
-                    this.hasDetails = true;
-                    this.hasTable = true;
+                    this.hasDetails = true; // display "Details" when the button is clicked
+
+                    this.hasTable = true; // display table when the button is clicked
                 },
                 deleteRow: function(rowIndex) {
                     this.harvestLogs.splice(rowIndex, 1);
