@@ -4,7 +4,7 @@
     <title>Vue1</title>
 </head>
 <body>
-    <h1>Harvest Report</h1>
+    <h1 data-cy="page-header">Harvest Report</h1>
     <p>This page is a <i>mockup</i> of a simplified harvest report.</p>
 
     <div id="report" v-cloak>
@@ -13,38 +13,38 @@
         <br>
         
         <label for="start-date">Start:</label>
-        <input type="date" id="start-date" name="start-date" :min="reportStartDate" :max="reportEndDate" v-model="reportStartDate" />
+        <input data-cy="start-date" type="date" id="start-date" name="start-date" :min="reportStartDate" :max="reportEndDate" v-model="reportStartDate"/>
         <label for="end-date">End:</label>
-        <input type="date" id="end-date" name="end-date" :min="reportStartDate" max="reportEndDate" v-model="reportEndDate" />
+        <input data-cy="end-date" type="date" id="end-date" name="end-date" :min="reportStartDate" max="reportEndDate" v-model="reportEndDate"/>
         <br>
         
         <label for="crop">Crop:</label>
-        <select id="crop" name="crop" v-model="reportCrop">
+        <select id="crop" name="crop" v-model="reportCrop" data-cy="crop">
             <option v-for="crop in cropNames">{{ crop }}</option>
         </select>
         <label for="field">Area:</label>
-        <select id="field" name="field" v-model="reportArea">
+        <select id="field" name="field" v-model="reportArea" data-cy="area">
             <option v-for="area in areaNames">{{ area }}</option>
         </select>
         <br>
         
-        <button type="button" @click="generateReport">Generate Report</button>
+        <button data-cy="generate-report-button" type="button" @click="generateReport">Generate Report</button>
         <hr>
 
-        <h1>{{ reportTitle ? reportTitle : "Mock Harvest Report" }}</h1>
+        <h1 data-cy="report-title" v-if="hasTitle">{{ reportTitle }}</h1>
 
         <p>Details:</p>
-        <ul>
-            <li><strong>Farm</strong>:{{ farm }}</li>
-            <li><strong>User</strong>:{{ user }}</li>
-            <li><strong>Language</strong>:{{ language }}</li>
+        <ul data-cy="details" v-if="hasDetails">
+            <li data-cy="farm-name"><strong>Farm</strong>:{{ farm }}</li>
+            <li data-cy="username"><strong>User</strong>:{{ user }}</li>
+            <li><strong>Language</strong>:<span data-cy="language">{{ language }}</span></li>
             <br>
-            <li><strong>Start</strong>:{{ reportStartDate }}</li>
-            <li><strong>End</strong>:{{ reportEndDate }}</li>
-            <li><strong>Crop</strong>:{{ reportCrop }}</li>
+            <li><strong>Start</strong>:<span data-cy="report-start-date">{{ reportStartDate }}</span></li>
+            <li><strong>End</strong>:<span data-cy="report-end-date">{{ reportEndDate }}</span></li>
+            <li><strong>Crop</strong>:<span data-cy="report-crop">{{ reportCrop }}</span></li>
         </ul>
         <br>
-        <table border="1">
+        <table border="1" data-cy="harvest-report-table" v-if="hasTable">
             <tr v-if="harvestReportRows.length !== 0">
                 <th>Row</th>
                 <th>Date</th>
@@ -82,6 +82,9 @@
                 idToCropMap: new Map(),
                 idToAreaMap: new Map(),
                 result: [],
+                hasTitle: false,
+                hasDetails: false,
+                hasTable: false,
             },
             computed: {
                 cropNames() {
@@ -138,6 +141,10 @@
                             console.log("Error Occurred");
                             console.log(error);
                          })
+                    
+                    this.hasTitle = true;
+                    this.hasDetails = true;
+                    this.hasTable = true;
                 },
                 deleteRow: function(rowIndex) {
                     this.harvestLogs.splice(rowIndex, 1);
