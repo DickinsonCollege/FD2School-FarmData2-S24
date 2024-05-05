@@ -5,7 +5,7 @@
     <input type=”text” id=”title” v-model="reportTitle"/>
     <br>
     <label for="crop">Crop:</label>
-    <select id="crop" name="crop">
+    <select id="crop" name="crop" v-model="reportCrop">
         <option v-for="crop in cropNames">{{ crop }}</option>
     </select>
     <br>
@@ -69,7 +69,7 @@
                 reportLanguage: "",
                 reportStart: "05/05/2020",
                 reportEnd: "05/10/2020",
-                reportCrop: "Kale",
+                reportCrop: "",
                 //reportCropList: ["Broccoli", "Kale", "Peas"],
                 reportAreaList: ["All", "Chuau-1", "SQ7"],
                 reportTable: [],
@@ -83,14 +83,17 @@
                 harvestReportRows() { 
                     let tableRows = [] 
                     for(let log of this.results) { 
-                        let tableRow = { 
-                            date: dayjs.unix(log.timestamp).format('MM/DD/YYYY'), 
-                            area: log.area[0].name,
-                            crop: this.idToCropMap.get(log.data.crop_tid),
-                            yield: log.quantity[0].value,
-                            units: log.quantity[0].unit.name,
+                        let cropName = this.idToCropMap.get(log.data.crop_tid)
+                        if (cropName === this.reportCrop) {
+                            let tableRow = { 
+                                date: dayjs.unix(log.timestamp).format('MM/DD/YYYY'), 
+                                area: log.area[0].name,
+                                crop: cropName,
+                                yield: log.quantity[0].value,
+                                units: log.quantity[0].unit.name,
+                            }
+                            tableRows.push(tableRow) 
                         } 
-                        tableRows.push(tableRow) 
                     } 
                     return tableRows 
                 },
@@ -101,17 +104,11 @@
                     let timestampEnd = dayjs(this.reportEnd).unix()  
                     let apiStr = `/log.json?type=farm_harvest&timestamp[ge]=${timestampStart}&timestamp[le]=${timestampEnd}`
                     getAllPages(apiStr, this.results)
-                    .then(() => { 
-                        //this.reportFarm = response.data.name;
-                        //this.reportUser = response.data.user.name;
-                        //this.reportLanguage = response.data.languages.en.name;
-                        console.log(this.results)
-                    }) 
+                    .then(() => {}) 
                     .catch((error) => { 
                         console.log("Error Occurred")
                         console.log(error)
                     }) 
-                    //this.reportTable.push({date:"2018-05-01", area:"Orion-3", crop: "Kale", yield: 12, units: "Bunches"});
                 }
             },
             created() { 
