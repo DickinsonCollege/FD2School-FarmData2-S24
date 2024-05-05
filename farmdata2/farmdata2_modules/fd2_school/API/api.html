@@ -26,17 +26,17 @@
                     <li>
                         <label for="crop">Crop:</label>
                         <select id="crop" v-model="crop" >
-                            <option v-for="item in plant">{{item}}</option>
+                            <option v-for="crop in cropNames">{{ crop }}</option>
                         </select>
                     </li>
 
                     <li><label for="area">Area:</label>
                         <select id="area" name="fields">
-                            <option v-for="item in area">{{item}}</option>
+                            <option v-for="area in areaNames">{{ area }}</option>
                         </select>
                     </li>
                 </ul>
-                <botton v-on:click="saveLog" @click="changeState('edit')">Generate Report</botton>
+                <button v-on:click="saveLog" @click="changeState('edit')">Generate Report</button>
 
             </p>
             
@@ -50,10 +50,11 @@
                 Detail:
                 <dd>
                     <ul>
-                        <li><strong>Farm:</strong>Sample Farm</li>
-                        <li><strong>User:</strong>manager1</li>
-                        <li><strong>Language:</strong>English</li> <br>
-
+                        <li v-model="farm"><strong>Farm:</strong>{{farm}}</li>
+                        <li v-model="user"><strong>User:</strong>{{user}}</li>
+                        <li v-model="language"><strong>Language:</strong>{{language}}</li> <br>
+                    </ul>
+                    <ul>
                         <li><strong>Start:</strong>{{start}}</li>
                         <li><strong>End:</strong>{{end}}</li>
                         <li><strong>Crop:</strong>{{crop}}</li>
@@ -81,42 +82,82 @@
             </tr>
         </table>
     </div>
+    <script src="https://unpkg.com/vue@2"></script>
     <script>
         var harvest_report = new Vue({
             el: "#report",
 
+            
             data: {
+                farm:"",
+                user:"",
+                language:"",
                 state: 'defualt',
                 header: "My Sample Harvest Report",
                 start: "05/05/2020",
                 end: "05/15/2020",
-                crop: "",
-                plant: [
-                    "Broccoli",
-                    "Kale",
-                    "Peas",
-                ],
-                area: [
-                    "All",
-                    "Chuau-1",
-                    "SQ7",
-                ],
-
-                harvestLog: [
-
-                ],
-
+                crop: "kale",
+                harvestLog: [],
+                idToCropMap: new Map(),
+                idToAreaMap: new Map(),
                 
+            },
+            computed:{                       
+                cropNames() {
+                    return Array.from(this.idToCropMap.values());
+                },
+                areaNames() {
+                    return Array.from(this.idToAreaMap.values());
+                },
             },
             methods:{
                 saveLog: function(){
-                    this.harvestLog.push({date:'05/01/2018', area:'Orion-3', crop:'Kale', yield:'12', units:'Bunches'});      
+
+                    axios.get('http://fd2_farmdata2/farm.json') 
+                            .then((response) => {
+
+                                this.farm = response.data.name
+
+                                this.user = response.data.user.name
+
+                                this.language = response.data.languages.en.name
+
+
+                            })
+                            .catch((error) => {
+                                console.log("Error Occurred")
+                                console.log(error)
+                            })
+                            this.farm = "Sample Farm";
+                            this.user = "manager2";
+                            this.language = "English";
                 },
 
                 changeState: function(newState){
                     this.state = newState;
                 }
-            }
+            },
+            created() {
+	                    getIDToCropMap()
+                        .then((cropMap) =>{
+                            console.log(cropMap);
+                            this.idToCropMap=cropMap;
+                        })
+                        .catch((err) => {
+                            console.log("Error Occurred")
+                            console.log(error)
+
+                        });
+                        getIDToAreaMap()
+                            .then((areaMap) => {
+                            console.log(areaMap);
+                            this.idToAreaMap = areaMap;
+                        })
+                        .catch((error) => {
+                        console.log("Error Occurred");
+                        console.log(error);
+                });
+            },
         });
         Vue.config.devtools = true;
     </script>
