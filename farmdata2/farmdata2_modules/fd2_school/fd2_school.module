@@ -62,6 +62,68 @@ function fd2_school_menu() {
 
   // Add items blocks for new sub-tabs here.
 
+  $items['farm/fd2-school/html'] = array(
+        'title' => 'HTML',
+        'type' => MENU_LOCAL_TASK,
+        'page callback' => 'fd2_school_view',
+        'page arguments' => array('html'),
+        'access arguments' => array('view fd2 school'),
+        'weight' => 1,
+    );
+
+$items['farm/fd2-school/vue1'] = array(
+        'title' => 'VUE1',
+        'type' => MENU_LOCAL_TASK,
+        'page callback' => 'fd2_school_view',
+        'page arguments' => array('vue1'),
+        'access arguments' => array('view fd2 school'),
+        'weight' => 2,
+    );
+
+$items['farm/fd2-school/Vue2'] = array(
+        'title' => 'VUE2',
+        'type' => MENU_LOCAL_TASK,
+        'page callback' => 'fd2_school_view',
+        'page arguments' => array('Vue2'),
+        'access arguments' => array('view fd2 school'),
+        'weight' => 3,
+    );
+
+$items['farm/fd2-school/API'] = array(
+        'title' => 'API',
+        'type' => MENU_LOCAL_TASK,
+        'page callback' => 'fd2_school_view',
+        'page arguments' => array('API'),
+        'access arguments' => array('view fd2 school'),
+        'weight' => 4,
+    );
+
+$items['farm/fd2-school/api2'] = array(
+        'title' => 'API2',
+        'type' => MENU_LOCAL_TASK,
+        'page callback' => 'fd2_school_view',
+        'page arguments' => array('api2'),
+        'access arguments' => array('view fd2 school'),
+        'weight' => 5,
+    );
+
+$items['farm/fd2-school/e2e'] = array(
+        'title' => 'E2E',
+        'type' => MENU_LOCAL_TASK,
+        'page callback' => 'fd2_school_view',
+        'page arguments' => array('e2e'),
+        'access arguments' => array('view fd2 school'),
+        'weight' => 6,
+    );
+
+$items['farm/fd2-school/FD2'] = array(
+        'title' => 'FD2',
+        'type' => MENU_LOCAL_TASK,
+        'page callback' => 'fd2_school_view',
+        'page arguments' => array('FD2'),
+        'access arguments' => array('view fd2 school'),
+        'weight' => 7,
+    );
   return $items;
 };
 
@@ -91,3 +153,4 @@ function fd2_school_preprocess_page() {
     drupal_add_js($cmd,'inline');
   }
 };
+

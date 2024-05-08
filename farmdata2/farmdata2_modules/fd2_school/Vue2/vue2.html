@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head></head>
+  <title>Harvest Report</title>
+</head>
+<body>
+
+<h1>Harvest Report</h1>
+<p>This page is a <i>mockup</i> of a simplified harvest report</p>
+
+<div id="app" v-cloak>
+  <label for="reportTitle">Title:</label>
+  <input type="text" id="reportTitle" name="reportTitle" v-model="reportTitle">
+
+  <br>
+  <br>
+
+  <label for="start_date">Start Date:</label>
+  <input type="date" id="start_date" name="start_date" min="2014-01-01" max="2022-01-01" v-model="reportStartDate">
+
+  <label for="end_date">End Date:</label>
+  <input type="date" id="end_date" name="end_date" min="2020-05-05" max="2022-01-01" v-model="reportEndDate">
+
+  <br>
+  <br>
+
+  <label for="crop">Crop:</label>
+  <select v-model="reportSelectedCrop" id="crop" name="crop">
+    <option v-for="crop in cropList" :value="crop">{{ crop }}</option>
+  </select>
+
+  <label for="field">Area:</label>
+  <select v-model="reportSelectedArea" id="area" name="area">
+    <option v-for="area in areaList" :value="area">{{ area }}</option>
+  </select>
+
+  <button @click="addHarvestLog" :disabled="reportTitle.trim() === ''">Generate Report</button>
+
+
+</div>
+
+<hr>
+<div>
+<h1>{{reportTitle ? reportTitle : "Mock Harvest Report"}}</h1>
+
+</div>
+<p>Details:</p>
+<ul>
+  <li><b>Farm</b>: Sample Farm</li>
+  <li><b>User</b>: manager1</li>
+  <li><b>Language</b>: English</li>
+</ul>
+<ul>
+  <li><b>Start</b>: {{ reportStartDate }}</li>
+  <li><b>End</b>: {{ reportEndDate }}</li>
+  <li><b>Crop</b>: {{ reportSelectedCrop }}</li>
+</ul>
+
+<div v-if="harvestLogs.length > 0">
+  <table border="1">
+    <thead>
+      <tr>
+        <th>Row</th>
+        <th>Date</th>
+        <th>Area</th>
+        <th>Crop</th>
+        <th>Yield</th>
+        <th>Units</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="(log, index) in harvestLogs" :key="index">
+        <td>{{ index + 1 }}</td>
+        <td>{{ log.date }}</td>
+        <td>{{ log.area }}</td>
+        <td>{{ log.crop }}</td>
+        <td>{{ log.yield }}</td>
+        <td>{{ log.units }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div v-else>
+  <p>No matching records found.</p>
+</div>
+
+<script src="https://unpkg.com/vue@2"></script>
+<script>
+  var harvest = new Vue({
+    el: '#app',
+    data: {
+      reportTitle: 'My Sample Harvest Report',
+      reportStartDate: '2020-05-01',
+      reportEndDate: '2020-05-15',
+      reportSelectedCrop: "Kale",
+      cropList: ["Broccoli", "Kale", "Peas"],
+      reportSelectedArea: "ALL",
+      areaList: ["ALL", "SQ7", "Chuau-1"],
+      harvestlogs: [],
+                           
+    },
+    settingMaxMin: {
+      minStartDate: function() {
+        return this.reportEndDate;
+      },
+      maxEndDate: function() {
+        return this.reportStartDate;
+      }
+    },
+    methods: {
+  addHarvestLog: function() {
+    if (this.reportTitle.trim() !== '') {
+      this.harvestLogs.push({
+        row: this.logs.length+1,
+        date: '2018-05-01',
+        area: 'Orion-3',
+        crop: 'Kale',
+        yield: '12',
+        units: 'Bunches'
+      });
+      this.reportTitle = '';
+    }
+  }
+}
+  });
+  Vue.config.devtools = true; 
+</script>
+
+</body>
+</html>
