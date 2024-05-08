@@ -17,4 +17,13 @@ describe("Test the Table header", () => {
         cy.get("[data-cy=generate-button]").click()
         cy.get("[data-cy=table-headers]").children().should("have.length", 6);
     })
+    it("Check the table after filtering", () =>{
+        cy.get("[data-cy=crop-dropdown]> [data-cy=dropdown-input]").select("ARUGULA")
+        cy.get("[data-cy=generate-button]").click()
+        cy.get("[data-cy=table-body]").children().should("have.length", "4")
+        cy.get("[data-cy=r0-Crop]").should("have.text", "ARUGULA")
+        cy.get("[data-cy=r1-Crop]").should("have.text", "ARUGULA")
+        cy.get("[data-cy=r2-Crop]").should("have.text", "ARUGULA")
+        cy.get("[data-cy=r3-Crop]").should("have.text", "ARUGULA")
+    })
 })

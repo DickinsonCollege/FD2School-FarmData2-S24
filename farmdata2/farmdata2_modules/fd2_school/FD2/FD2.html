@@ -117,14 +117,14 @@
         let tableRows = [];
         for (let log of this.harvestLogs) {
             let cropName = this.idToCropMap.get(log.data.crop_tid);
-            if (cropName === this.crop || cropName === 'All') {
+            if (cropName === this.crop || this.crop === 'All') {
                 let tableRow = {
                     date: dayjs.unix(log.timestamp).format('MM/DD/YYYY'),
                     area: log.area[0].name,
                     yield: log.quantity[0].value,
                     units: log.quantity[0].unit.name,
                     crop: cropName,
-                };
+                }
                 tableRows.push(tableRow);
         }
     }
@@ -137,13 +137,13 @@
     if (this.reportTitle.trim() !== '') {
         let startTimestamp = dayjs(this.reportStartDate).unix();
         let endTimestamp = dayjs(this.reportEndDate).unix();
-        let rstring = `/log.json?type=farm_harvest&timestamp[ge]=${startTimestamp}&timestamp[le]=${endTimestamp}`;
+        AllLogs = `/log.json?type=farm_harvest&timestamp[ge]=${startTimestamp}&timestamp[le]=${endTimestamp}`;
 
         console.log("Start Timestamp:", startTimestamp);
         console.log("End Timestamp:", endTimestamp);
-        console.log("Request:", rstring);
+        console.log("Request:", AllLogs);
 
-        getAllPages(rstring, this.harvestLogs)
+        getAllPages(AllLogs, this.harvestLogs)
         .then(() => {
           console.log("harvest logs retrieved:", this.harvestLogs);
         })
