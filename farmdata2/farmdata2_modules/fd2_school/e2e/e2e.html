@@ -5,12 +5,12 @@
     <input type=”text” id=”title” v-model="reportTitle"/>
     <br>
     <label for="crop">Crop:</label>
-    <select id="crop" name="crop" v-model="reportCrop">
+    <select id="crop" name="crop" v-model="reportCrop" data-cy="crop-dropdown">
         <option v-for="crop in cropNames">{{ crop }}</option>
     </select>
     <br>
     <label for="area">Area:</label>
-    <select id="area" name="area">
+    <select id="area" name="area" data-cy="crop-list">
         <option v-for="area in reportAreaList">{{ area }}</option>
     </select>
     <br>
