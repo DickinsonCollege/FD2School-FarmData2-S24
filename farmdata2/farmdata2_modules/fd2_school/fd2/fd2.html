@@ -1,0 +1,135 @@
+<div id="farm-report">
+    <h3 data-cy="page-header">Harvest Report</h3>
+    <p>This page is a <i>mockup</i> of a simplified harvest report.</p>
+    <label for=”title”>Title:</label> 
+    <input type=”text” id=”title” v-model="reportTitle"/>
+    <br>
+    <dropdown-with-all data-cy="crop-selection" 
+            includes-all
+            :selected-val='reportCrop'
+            :dropdown-list='cropNames'
+            @selection-changed="cropChange">
+        Crop: 
+    </dropdown-with-all>
+    <br>
+    <label for="area">Area:</label>
+    <select id="area" name="area" data-cy="crop-list">
+        <option v-for="area in reportAreaList">{{ area }}</option>
+    </select>
+    <br>
+    <label for="start">Start:</label>
+    <input type="date" id="start" name="start" min="2014-01-01" max="2022-01-01" :max="reportEnd" v-model="reportStart" data-cy="start-date" />
+    <label for="end">End:</label>
+    <input type="date" id="end" name="end" min="2020-05-05" max="2022-01-01" :min="reportStart"v-model="reportEnd" data-cy="end-date"/>
+    <br>
+    <button type="button" @click='addReportLog' data-cy="generate-report-button">Generate Report</button>
+
+
+<hr>
+
+    <div>
+        <h3 data-cy="report-title">{{ reportTitle === '' ? 'Mock Harvest Report' : reportTitle }}</h3>
+        <p>Details:</p>
+        <ul>
+            <li data-cy="farm"><strong>Farm:</strong>{{ reportFarm }}</li>
+            <li data-cy="user"><strong>User:</strong>{{ reportUser }}</li>
+            <li data-cy="lang"><strong>Language:</strong>{{ reportLanguage }}</li>
+            <br>
+            <li><strong>Start:</strong>{{ reportStart }}</li>
+            <li><strong>End:</strong>{{ reportEnd }}</li>
+            <li><strong>Crop:</strong>{{ reportCrop }}</li>
+        </ul>
+        <div v-if="harvestReportRows.length != 0">
+            <custom-table data-cy="table"
+                :columns="columns"
+                :rows="harvestReportRows"
+                >
+            </custom-table>
+        </div>
+        <div v-else><p>There no matching records</p></div>
+    </div>
+
+    <script>
+        var farmReport = new Vue ({
+            el: "#farm-report",
+            data: {
+                reportTitle: "My Sample Harvest Report",
+                reportFarm: "",
+                reportUser: "",
+                reportLanguage: "",
+                reportStart: "2020-05-05",
+                reportEnd: "2020-05-15",
+                reportCrop: "All",
+                //reportCropList: ["Broccoli", "Kale", "Peas"],
+                reportAreaList: ["All", "Chuau-1", "SQ7"],
+                reportTable: [],
+                idToCropMap: new Map (),
+                results: [],
+                columns: [
+                {"header": 'Row', "visible": true, "inputType": {'type': 'no input'}},
+                {"header": 'Date', "visible": true, "inputType": {'type': 'text'}},
+                {"header": 'Area', "visible": true, "inputType": {'type': 'text'}},
+                {"header": 'Crop', "visible": true, "inputType": {'type': 'text'}},
+                {"header": 'Yield', "visible": true, "inputType": {'type': 'text'}},
+                {"header": 'Units', "visible": true, "inputType": {'type': 'text'}},
+                ],
+            },
+            components: {
+                'dropdown-with-all': DropdownWithAllComponent,
+                'custom-table': CustomTableComponent,
+            },
+            computed: {
+                cropNames () {
+                    return Array.from(this.idToCropMap.values());
+                },
+                harvestReportRows() { 
+                    let tableRows = [] 
+                    for(let log of this.results) { 
+                        let cropName = this.idToCropMap.get(log.data.crop_tid)
+                        if (cropName === this.reportCrop || this.reportCrop === "All") {
+                            tableRows.push({
+                                id: tableRows.length+1,
+                                data: [
+                                    tableRows.length+1,
+                                    dayjs(log.timestamp * 1000).format('MM/DD/YYYY'),
+                                    log.area[0].name,
+                                    cropName,
+                                    log.quantity[0].value,
+                                    log.quantity[0].unit.name,
+                                ]
+                            });
+                        } 
+                    } 
+                    return tableRows 
+                },
+            },
+            methods: {
+                addReportLog: function() {
+                    let timestampStart = dayjs(this.reportStart).unix()
+                    let timestampEnd = dayjs(this.reportEnd).unix()  
+                    let apiStr = `/log.json?type=farm_harvest&timestamp[ge]=${timestampStart}&timestamp[le]=${timestampEnd}`
+                    getAllPages(apiStr, this.results)
+                    .then(() => {}) 
+                    .catch((error) => { 
+                        console.log("Error Occurred")
+                        console.log(error)
+                    }) 
+                },
+                cropChange(newCrop) {
+                this.reportCrop = newCrop
+                },
+            },
+            created() { 
+                console.log("HarvestReport Vue instance created!") 
+                getIDToCropMap()
+                    .then((theMap) => {
+                        this.idToCropMap = theMap;
+                    })
+                    .catch((err) => {
+                        console.log("Error Occurred")
+                    })
+            }, 
+        });
+        Vue.config.devtools = true;
+    </script>
+</div>
