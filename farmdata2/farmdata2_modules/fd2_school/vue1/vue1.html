@@ -1,0 +1,79 @@
+<div id="farm-report">
+    <h3>Harvest Report</h3>
+    <p>This page is a <i>mockup</i> of a simplified harvest report.</p>
+    <label for=”title”>Title:</label> 
+    <input type=”text” id=”title” v-model="reportTitle"/>
+    <br>
+    <label for="crop">Crop:</label>
+    <select id="crop" name="crop">
+        <option v-for="crop in reportCropList">{{ crop }}</option>
+    </select>
+    <br>
+    <label for="area">Area:</label>
+    <select id="area" name="area">
+        <option v-for="area in reportAreaList">{{ area }}</option>
+    </select>
+    <br>
+    <label for="start">Start:</label>
+    <input type="date" id="start" name="start" min="2014-01-01" max="2022-01-01" v-model="reportStart" />
+    <label for="end">End:</label>
+    <input type="date" id="end" name="end" min="2020-05-05" max="2022-01-01" v-model="reportEnd" />
+    <br>
+    <button type="button">Generate Report</button>
+
+
+<hr>
+
+    <div>
+        <h3>{{ reportTitle === '' ? 'Mock Harvest Report' : reportTitle }}</h3>
+        <p>Details:</p>
+        <ul>
+            <li><strong>Farm:</strong>{{ reportFarm }}</li>
+            <li><strong>User:</strong>{{ reportUser }}</li>
+            <li><strong>Language:</strong>{{ reportLanguage }}</li>
+            <br>
+            <li><strong>Start:</strong>{{ reportStart }}</li>
+            <li><strong>End:</strong>{{ reportEnd }}</li>
+            <li><strong>Crop:</strong>{{ reportCrop }}</li>
+        </ul>
+
+        <table border=1>
+            <tr>
+                <th>Date</th>
+                <th>Area</th>
+                <th>Crop</th>
+                <th>Yield</th>
+                <th>Units</th>
+            </tr>
+            <tr v-for="item in reportTable">
+                <td>{{ item.date }}</td>
+                <td>{{ item.area }}</td>
+                <td>{{ item.crop }}</td>
+                <td>{{ item.yield }}</td>
+                <td>{{ item.units }}</td>
+            </tr>
+        </table>
+    </div>
+
+    <script>
+        var farmReport = new Vue ({
+            el: "#farm-report",
+            data: {
+                reportTitle: "My Sample Harvest Report",
+                reportFarm: "Sample Farm",
+                reportUser: "manager1",
+                reportLanguage: "English",
+                reportStart: "05/01/2018",
+                reportEnd: "05/15/2018",
+                reportCrop: "Kale",
+                reportCropList: ["Broccoli", "Kale", "Peas"],
+                reportAreaList: ["All", "Chuau-1", "SQ7"],
+                reportTable: [
+                {date: "2018-05-02", area: "Chuau-1", crop: "Kale", yield: 10, units: "Bunches"},
+                {date: "2018-08-08", area: "SQ7", crop: "Broccoli", yield: 10, units: "Bunches"} 
+                ]
+            }
+        });
+        Vue.config.devtools = true;
+    </script>
+</div>
