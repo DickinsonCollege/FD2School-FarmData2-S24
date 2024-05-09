@@ -91,7 +91,7 @@
                     let tableRows = [] 
                     for(let log of this.results) { 
                         let cropName = this.idToCropMap.get(log.data.crop_tid)
-                        if (cropName === this.reportCrop) {
+                        if (cropName === this.reportCrop || this.reportCrop === "All") {
                             let tableRow = { 
                                 date: dayjs.unix(log.timestamp).format('MM/DD/YYYY'), 
                                 area: log.area[0].name,
