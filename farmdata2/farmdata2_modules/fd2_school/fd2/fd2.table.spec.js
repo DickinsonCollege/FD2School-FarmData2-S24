@@ -18,4 +18,15 @@ describe("Test the harvest report table", () => {
         cy.get("[data-cy=h4]").should("have.text", "Yield")
         cy.get("[data-cy=h5]").should("have.text", "Units")
     })
+
+    it("Check report generation table to ASPARAGUS", () => {
+        cy.get("[data-cy=crop-selection] > [data-cy=dropdown-input]").select('ASPARAGUS')
+        cy.get("[data-cy=generate-report-button]").click()
+        cy.get("[data-cy=table-body]").children().should("have.length", "5")
+        cy.get("[data-cy=r0-Crop]").should("have.text", "ASPARAGUS")
+        cy.get("[data-cy=r1-Crop]").should("have.text", "ASPARAGUS")
+        cy.get("[data-cy=r2-Crop]").should("have.text", "ASPARAGUS")
+        cy.get("[data-cy=r3-Crop]").should("have.text", "ASPARAGUS")
+        cy.get("[data-cy=r4-Crop]").should("have.text", "ASPARAGUS")
+    })
 })
