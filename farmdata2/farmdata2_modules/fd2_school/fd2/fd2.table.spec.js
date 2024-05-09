@@ -4,8 +4,9 @@ describe("Test the harvest report table", () => {
         cy.visit("/farm/fd2-school/fd2")
     })
 
-    it("Click 'Generate Report' button", () => {
+    it("Check number of table headers", () => {
         cy.get("[data-cy=generate-report-button]").click()
+        cy.get("[data-cy=table-headers]").children().should("have.length", "6")
     })
 
     it("Check table headers", () => {
