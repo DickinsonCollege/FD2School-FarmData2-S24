@@ -30,11 +30,14 @@ describe("Testing cancel and submit button for table element in seeding report",
         })
     })
 
-    it("Make an edit, cancel, and check that tha database didn't change", () => {
+    it("Make an edit and cancel", () => {
         cy.get('[data-cy=r0-edit-button]').click({force: true})
         cy.get('[data-cy=td-r0c13]').type('rar muahaha')
         cy.get('[data-cy=r0-cancel-button]').click({force: true})
     
+        
+    })
+    it("check that database didn't change", () => {
         cy.wrap(getRecord(endpoint)).as('fetch')
         cy.get('@fetch').then((response) => {
             expect(response.status).to.equal(200)  // 200 - OK/success
