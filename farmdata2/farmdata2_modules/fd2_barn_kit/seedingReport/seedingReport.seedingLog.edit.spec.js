@@ -1,0 +1,60 @@
+var FarmOSAPI = require('../../resources/FarmOSAPI.js')
+var getRecord = FarmOSAPI.getRecord
+
+describe("Testing cancel and submit button for table element in seeding report", () => {
+    let endpoint = "/log.json?id=229"
+
+
+    beforeEach(() => {
+        cy.login("manager1", "farmdata2")
+        cy.visit("farm/fd2-barn-kit/seedingReport")
+        cy.get('[data-cy=start-date-select]').type('2020-05-05')
+        cy.get('[data-cy=end-date-select]').type('2020-05-05')
+        cy.get('[data-cy=generate-rpt-btn]').click()
+        cy.waitForPage()
+    })
+    
+    it("Make an edit and submit", () => { 
+
+        cy.get('[data-cy=r0-edit-button]').click({force: true})
+        cy.get('[data-cy=td-r0c13]').type('edit:)')
+        cy.get('[data-cy=r0-save-button]').click({force: true})
+        
+    })
+
+    it("Check that database was changed", () => {
+        cy.wrap(getRecord(endpoint)).as('fetch')
+        cy.get('@fetch').then((response) => {
+            expect(response.status).to.equal(200)  // 200 - OK/success
+            expect(response.data.list[0].notes.value).to.have.string('edit:)')
+        })
+    })
+
+    it("Make an edit and cancel", () => {
+        cy.get('[data-cy=r0-edit-button]').click({force: true})
+        cy.get('[data-cy=td-r0c13]').type('rar muahaha')
+        cy.get('[data-cy=r0-cancel-button]').click({force: true})
+    
+        
+    })
+    it("check that database didn't change", () => {
+        cy.wrap(getRecord(endpoint)).as('fetch')
+        cy.get('@fetch').then((response) => {
+            expect(response.status).to.equal(200)  // 200 - OK/success
+            expect(response.data.list[0].notes.value).to.not.have.string('rar muahaha')
+        })
+    })
+    it("Undo change made in the first it", () => {
+        cy.get('[data-cy=r0-edit-button]').click({force: true})
+        cy.get('[data-cy=td-r0c13]').type('{selectall}{del}')
+        cy.get('[data-cy=r0-save-button]').click({force: true})
+    })
+
+    it("Check that database was reverted", () => {
+        cy.wrap(getRecord(endpoint)).as('fetch')
+        cy.get('@fetch').then((response) => {
+            expect(response.status).to.equal(200)  // 200 - OK/success
+            expect(response.data.list[0].notes.value).to.not.have.string('edit:)')
+        })
+    })
+})
