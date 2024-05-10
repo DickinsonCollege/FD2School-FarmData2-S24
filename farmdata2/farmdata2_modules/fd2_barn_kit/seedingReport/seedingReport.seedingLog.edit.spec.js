@@ -3,7 +3,7 @@ var getRecord = FarmOSAPI.getRecord
 
 describe("Testing cancel and submit button for table element in seeding report", () => {
     let endpoint = "/log.json?id=229"
-    //let allpages = null
+
 
     beforeEach(() => {
         cy.login("manager1", "farmdata2")
@@ -14,29 +14,21 @@ describe("Testing cancel and submit button for table element in seeding report",
         cy.waitForPage()
     })
     
-    // it("Make an edit, submit, and check that database was changed", () => { 
+    it("Make an edit and submit", () => { 
 
-    //     cy.wrap(getRecord(endpoint)).as('fetch')
-    //     cy.get('@fetch').then((response) => {
-    //         expect(response.status).to.equal(200)  // 200 - OK/success
-    //         expect(response.data.list[0].notes.value).to.have.string('')
-    //     }) //.data.list[0].notes.value 
-
-    //     cy.get('[data-cy=r0-edit-button]').click({force: true})
-    //     cy.get('[data-cy=td-r0c13]').type('edit:)')
-    //     cy.get('[data-cy=r0-save-button]').click({force: true})
+        cy.get('[data-cy=r0-edit-button]').click({force: true})
+        cy.get('[data-cy=td-r0c13]').type('edit:)')
+        cy.get('[data-cy=r0-save-button]').click({force: true})
         
-    //     cy.get('[data-cy=start-date-select]').type('2020-05-05')
-    //     cy.get('[data-cy=end-date-select]').type('2020-05-05')
-    //     cy.get('[data-cy=generate-rpt-btn]').click()
-    //     cy.get('[data-cy=td-r0c13]').should('contain.text', 'edit:)')
+    })
 
-        // cy.wrap(getRecord(endpoint)).as('fetch')
-        // cy.get('@fetch').then((response) => {
-        //     expect(response.status).to.equal(200)  // 200 - OK/success
-        //     expect(response.data.list[0].notes.value).to.have.string('<p>edit:)</p>\n')
-        // }) //.data.list[0].notes.value
-    // })
+    it("Check that database was changed", () => {
+        cy.wrap(getRecord(endpoint)).as('fetch')
+        cy.get('@fetch').then((response) => {
+            expect(response.status).to.equal(200)  // 200 - OK/success
+            expect(response.data.list[0].notes.value).to.have.string('edit:)')
+        })
+    })
 
     it("Make an edit, cancel, and check that tha database didn't change", () => {
         cy.get('[data-cy=r0-edit-button]').click({force: true})
@@ -46,20 +38,20 @@ describe("Testing cancel and submit button for table element in seeding report",
         cy.wrap(getRecord(endpoint)).as('fetch')
         cy.get('@fetch').then((response) => {
             expect(response.status).to.equal(200)  // 200 - OK/success
-            expect(response.data.list[0].notes.value).to.have.string('')
-        }) //.data.list[0].notes.value
-        // cy.get('[data-cy=start-date-select]').type('2020-05-05')
-        // cy.get('[data-cy=end-date-select]').type('2020-05-05')
-        // cy.get('[data-cy=generate-rpt-btn]').click()
-        // cy.get('[data-cy=td-r0c13]').should('contain.text', '')
+            expect(response.data.list[0].notes.value).to.not.have.string('rar muahaha')
+        })
     })
-    // it("Undo change made in the first it", () => {
-    //     cy.get('[data-cy=r0-edit-button]').click({force: true})
-    //     cy.get('[data-cy=td-r0c13]').type('{selectall}{del}')
-    //     cy.get('[data-cy=r0-save-button]').click({force: true})
-    //     cy.get('[data-cy=start-date-select]').type('2020-05-05')
-    //     cy.get('[data-cy=end-date-select]').type('2020-05-05')
-    //     cy.get('[data-cy=generate-rpt-btn]').click()
-    //     cy.get('[data-cy=td-r0c13]').should('have.text', '     ')
-    // })
-} )
+    it("Undo change made in the first it", () => {
+        cy.get('[data-cy=r0-edit-button]').click({force: true})
+        cy.get('[data-cy=td-r0c13]').type('{selectall}{del}')
+        cy.get('[data-cy=r0-save-button]').click({force: true})
+    })
+
+    it("Check that database was reverted", () => {
+        cy.wrap(getRecord(endpoint)).as('fetch')
+        cy.get('@fetch').then((response) => {
+            expect(response.status).to.equal(200)  // 200 - OK/success
+            expect(response.data.list[0].notes.value).to.not.have.string('edit:)')
+        })
+    })
+})
